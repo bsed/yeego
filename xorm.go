@@ -1,10 +1,11 @@
 /**
  * Created by angelina-zf on 17/2/25.
- * //TODO 目前只使用mysql,后续可以新增其他数据库类型
- * 数据库处理,使用x-orm
- * 依赖：
- *		"github.com/go-xorm/xorm"
  */
+
+// yeego
+// 数据库处理,使用x-orm
+// 依赖："github.com/go-xorm/xorm"
+// TODO 目前只使用mysql,后续可以新增其他数据库类型
 package yeego
 
 import (
@@ -32,9 +33,7 @@ func init() {
 	xORM = make(map[string]*xorm.Engine)
 }
 
-/*
-	初始化默认的数据库配置，读取配置文件
- */
+// NewDefaultDb 初始化默认的数据库配置，读取配置文件.
 func NewDefaultDb() {
 	var orm *xorm.Engine
 	var err error
@@ -80,9 +79,7 @@ func NewDefaultDb() {
 	xORM["default"] = orm
 }
 
-/*
-	初始化新的数据库实例
- */
+// NewDb 初始化新的数据库实例.
 func NewDb(instanceName string, dbConfig DBConfig) {
 	var orm *xorm.Engine
 	var err error
@@ -119,9 +116,7 @@ func NewDb(instanceName string, dbConfig DBConfig) {
 	xORM[instanceName] = orm
 }
 
-/*
-	通过实例名称获取数据库连接
- */
+// GetORMByName 通过实例名称获取数据库连接.
 func GetORMByName(instanceName string) *xorm.Engine {
 	orm, ok := xORM[instanceName]
 	if !ok {
@@ -130,9 +125,7 @@ func GetORMByName(instanceName string) *xorm.Engine {
 	return orm
 }
 
-/*
-	获取默认的数据库连接
- */
+// GetORM 获取默认的数据库连接.
 func GetORM() *xorm.Engine {
 	return xORM["default"]
 }

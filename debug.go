@@ -1,7 +1,8 @@
 /**
  * Created by angelina-zf on 17/2/25.
- * 调试接口，格式化打印数据
  */
+
+// yeego 调试接口，格式化打印数据
 package yeego
 
 import (
@@ -12,9 +13,7 @@ import (
 	"os"
 )
 
-/*
-	格式化打印数据
- */
+// Print 格式化打印数据.
 func Print(objList ...interface{}) {
 	var pc, file, line, ok = runtime.Caller(1)
 	if !ok {
@@ -35,9 +34,7 @@ func Print(objList ...interface{}) {
 	return
 }
 
-/*
-	返回格式化后的数据
- */
+// Sprint 返回格式化后的数据.
 func Sprint(objList ...interface{}) string {
 	/*
 	Caller报告当前go程调用栈所执行的函数的文件和行号信息。实参skip为上溯的栈帧数，0表示Caller的调用者（Caller所在的调用栈）。
@@ -61,9 +58,7 @@ func Sprint(objList ...interface{}) string {
 	return buf.String()
 }
 
-/*
-	如果pc中存在函数,则返回函数名
- */
+// function 如果pc中存在函数,则返回函数名.
 func function(pc uintptr) []byte {
 	/*
 	FuncForPC返回一个表示调用栈标识符pc对应的调用栈的*Func；
@@ -80,9 +75,7 @@ func function(pc uintptr) []byte {
 	return name
 }
 
-/*
-	将interface{}格式化后添加到buf中
- */
+// formatData 将interface{}格式化后添加到buf中.
 func formatData(buf *bytes.Buffer, data interface{}) {
 	val := reflect.ValueOf(data)
 	kind := val.Kind()
