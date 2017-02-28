@@ -82,6 +82,15 @@ func FileExists(filename string) bool {
 	return err == nil
 }
 
+// MkdirFile 创建文件夹
+func MkdirFile(path string) error {
+	err := os.MkdirAll(path, os.ModePerm) //在当前目录下生成md目录
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // FileTimeModified 返回文件的最后修改时间
 // 如果有错误则返回空time.Time.
 func FileTimeModified(filename string) time.Time {
