@@ -5,7 +5,7 @@
 // yeego
 // 数据库处理,使用x-orm
 // 依赖："github.com/go-xorm/xorm"
-// TODO 目前只使用mysql,后续可以新增其他数据库类型
+// TODO 目前只使用mysql,后续可以新增其他数据库类型,貌似直接引入那些包就可以了^_^
 package yeego
 
 import (
