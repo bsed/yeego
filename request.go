@@ -9,24 +9,42 @@ import (
 
 	"errors"
 
-	"github.com/labstack/echo"
 	"regexp"
+
+	"fmt"
+
+	"github.com/labstack/echo"
 )
 
 type Request struct {
-	ctx    echo.Context
-	params *params
-	valid  validation.Validation
+	//请求上下文
+	context echo.Context
+	//请求参数
+	params *Param
+	//请求校验
+	valid validation.Validation
+
+	//jsonTag
+	jsonTag bool
+	//Json
+	json *Json
+	//jsonParam
+	jsonParam *JsonParam
 }
 
-type params struct {
+type Param struct {
 	key string
 	val string
 }
 
+type JsonParam struct {
+	key string
+	val Json
+}
+
 //新建请求
 func NewRequest(c echo.Context) *Request {
-	r := &Request{ctx: c}
+	r := &Request{context: c}
 	return r
 }
 
@@ -42,7 +60,8 @@ func (req *Request) Param(key string) *Request {
 func (req *Request) GetParam(key string) *Request {
 	req.CleanParams()
 	req.params.key = key
-	req.params.val = req.ctx.QueryParam(key)
+	req.params.val = req.context.QueryParam(key)
+	req.jsonTag = false
 	return req
 }
 
@@ -50,13 +69,57 @@ func (req *Request) GetParam(key string) *Request {
 func (req *Request) PostParam(key string) *Request {
 	req.CleanParams()
 	req.params.key = key
-	req.params.val = req.ctx.FormValue(key)
+	req.params.val = req.context.FormValue(key)
+	req.jsonTag = false
+	return req
+}
+
+//Json 相关
+func (req *Request) SetJson(json string) {
+	req.json = InitJson(json)
+}
+
+func (req *Request) GetJson() Json {
+	return req.jsonParam.val
+}
+
+//获取json参数
+func (req *Request) JsonParam(keys ...string) *Request {
+	req.CleanParams()
+
+	var tmpJson Json
+	if req.json != nil {
+		tmpJson = *(req.json)
+	}
+
+	for _, v := range keys {
+		tmpJson.Get(v)
+		req.jsonParam.key += v
+	}
+	req.jsonParam.val = tmpJson
+	req.jsonTag = true
+	return req
+}
+
+//设置默认参数值
+func (req *Request) SetDefault(val string) *Request {
+	if req.jsonTag == true {
+		if req.jsonParam.val == *new(Json) {
+			defJson := fmt.Sprintf(`{"index":"%s"}`, val)
+			req.jsonParam.val = *InitJson(defJson).Get("index")
+		}
+	} else {
+		if len(req.params.val) == 0 {
+			req.params.val = val
+		}
+	}
 	return req
 }
 
 //清除参数缓存
 func (req *Request) CleanParams() {
-	req.params = new(params)
+	req.params = new(Param)
+	req.jsonParam = new(JsonParam)
 }
 
 //清楚错误
@@ -68,8 +131,6 @@ func (req *Request) CleanError() {
 func (req *Request) GetString() string {
 	return req.getParamValue()
 }
-
-//获取参数并转化为int类型
 func (req *Request) GetInt() int {
 	if req.getParamValue() == "" {
 		return 0
@@ -200,6 +261,7 @@ func (req *Request) AlphaDash() *Request {
 	req.valid.AlphaDash(req.getParamValue(), req.getParamKey()).Message("AlphaDash格式不正确，参数名称：")
 	return req
 }
+
 //检查参数是否为IP地址
 func (req *Request) IP() *Request {
 	req.valid.IP(req.getParamValue(), req.getParamKey()).Message("IP地址格式不正确，参数名称：")

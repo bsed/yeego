@@ -144,3 +144,23 @@ func TestRequest_Validation(t *testing.T) {
 	req.CleanError()
 
 }
+
+func TestRequest_SetJson(t *testing.T) {
+	req := mockRequest_Get("/")
+	req.SetJson(`["value","1"]`)
+	Equal(req.json.GetIndex(1).ToString(), "value")
+}
+
+func TestRequest_GetJson(t *testing.T) {
+	req := mockRequest_Get("/")
+	req.SetJson(`{"value":"test"}`)
+	json := req.JsonParam("value").GetJson()
+	Equal((&json).ToString(), "test")
+}
+
+func TestRequest_SetDefault(t *testing.T) {
+	req := mockRequest_Get("/?value2=test22")
+	json := req.JsonParam("value1").SetDefault("test11").GetJson()
+	req.Param("value2").SetDefault("test222").GetString()
+	Equal((&json).ToString(), "test11")
+}

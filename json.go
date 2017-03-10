@@ -14,7 +14,7 @@ type Json struct {
 	Data interface{}
 }
 
-func Init(data string) *Json {
+func InitJson(data string) *Json {
 	j := new(Json)
 	var jsonData interface{}
 	if err := json.Unmarshal([]byte(data), &jsonData); err != nil {
@@ -46,8 +46,8 @@ func (j *Json) GetData() map[string]interface{} {
 //return Json of index n; warning that index is no unique
 func (j *Json) GetIndex(index int) *Json {
 	num := index - 1
-	if mapData, ok := (j.Data).([]interface{}); ok {
-		j.Data = mapData[index]
+	if arrData, ok := (j.Data).([]interface{}); ok {
+		j.Data = arrData[num]
 		return j
 	}
 
