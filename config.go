@@ -2,7 +2,6 @@ package yeego
 
 import (
 	"fmt"
-
 	"github.com/spf13/viper"
 )
 
