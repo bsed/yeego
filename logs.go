@@ -36,7 +36,7 @@ var ESFromHost string = "localhost"
 // ESIndex 要存储在哪个index索引下,默认的type为log
 var ESIndex string = "testlog"
 
-func init() {
+func Init() {
 	if !yeeFile.FileExists(LogPath) {
 		if createErr := yeeFile.MkdirFile(LogPath); createErr != nil {
 			Print(createErr)
