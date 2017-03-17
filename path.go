@@ -5,8 +5,8 @@
 package yeego
 
 import (
-	"path/filepath"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
