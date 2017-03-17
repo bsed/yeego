@@ -39,12 +39,12 @@ func NewDefaultDb() {
 	var err error
 	//TODO 此处需要dbconfig的配置文件，先自己mock数据吧
 	dbConfig := &DBConfig{
-		DbUser:    "root",
-		DbPassword:"root",
-		DbHost:    "127.0.0.1",
-		DbPort:    "3306",
-		DbName:    "yeeyun_todo",
-		DbType:    "mysql",
+		DbUser:     "root",
+		DbPassword: "root",
+		DbHost:     "127.0.0.1",
+		DbPort:     "3306",
+		DbName:     "yeeyun_todo",
+		DbType:     "mysql",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbConfig.DbUser, dbConfig.DbPassword,
 		dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName)
