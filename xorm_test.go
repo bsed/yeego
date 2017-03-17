@@ -8,17 +8,17 @@ import (
 )
 
 var testConfig DBConfig = DBConfig{
-	DbUser:    "root",
-	DbPassword:"root",
-	DbHost:    "127.0.0.1",
-	DbPort:    "3306",
-	DbName:    "yeeyun_todo",
-	DbType:    "mysql",
+	DbUser:     "root",
+	DbPassword: "root",
+	DbHost:     "127.0.0.1",
+	DbPort:     "3306",
+	DbName:     "yeeyun_todo",
+	DbType:     "mysql",
 }
 
 func TestNewDb(t *testing.T) {
 	instanceName := "test"
-	NewDb(instanceName, testConfig)
+	MustInitDb(instanceName, testConfig)
 	orm := GetORMByName(instanceName)
 	err := orm.Ping()
 	if err != nil {
