@@ -18,7 +18,6 @@ func MustInitConfig(filePath string, fileName string) {
 	Config.SetConfigName(fileName)
 	//filePath支持相对路径和绝对路径 etc:"/a/b" "b" "./b"
 	if filePath[:1] != "/" {
-
 		Config.AddConfigPath(GetCurrentPath() + "/" + filePath + "/")
 	} else {
 		Config.AddConfigPath(filePath + "/")
@@ -28,8 +27,3 @@ func MustInitConfig(filePath string, fileName string) {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err).Error())
 	}
 }
-
-func (config *configType) GetStringWithoutPrefix(key string) string {
-	return Config.GetString(string(RunMode) + "." + key)
-}
-
