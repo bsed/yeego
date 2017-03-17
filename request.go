@@ -4,14 +4,11 @@
 package yeego
 
 import (
+	"errors"
+	"fmt"
+	"regexp"
 	"strconv"
 	"yeego/validation"
-
-	"errors"
-
-	"regexp"
-
-	"fmt"
 
 	"github.com/labstack/echo"
 )
