@@ -16,15 +16,17 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// DBConfig
+// mysql数据库配置
 type DBConfig struct {
-	DbUser       string
-	DbPassword   string
-	DbHost       string
-	DbPort       string
-	DbName       string
-	DbType       string
-	MaxIdleConns int
-	MaxOpenConns int
+	DbUser       string // 用户
+	DbPassword   string // 密码
+	DbHost       string // 地址
+	DbPort       string // 端口
+	DbName       string // 数据库名称
+	DbType       string // 数据库类型
+	MaxIdleConns int    // 最大空闲连接数
+	MaxOpenConns int    // 最大打开连接数
 }
 
 var xORM map[string]*xorm.Engine
@@ -33,29 +35,19 @@ func init() {
 	xORM = make(map[string]*xorm.Engine)
 }
 
-// NewDefaultDb 初始化默认的数据库配置，读取配置文件.
-func NewDefaultDb() {
+// MustInitDefaultDb
+// 初始化默认的数据库配置，读取配置文件.
+func MustInitDefaultDb(dbConfig DBConfig) {
 	var orm *xorm.Engine
 	var err error
-	//TODO 此处需要dbconfig的配置文件，先自己mock数据吧
-	dbConfig := &DBConfig{
-		DbUser:    "root",
-		DbPassword:"root",
-		DbHost:    "127.0.0.1",
-		DbPort:    "3306",
-		DbName:    "yeeyun_todo",
-		DbType:    "mysql",
-	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbConfig.DbUser, dbConfig.DbPassword,
 		dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName)
 	orm, err = xorm.NewEngine(dbConfig.DbType, dsn)
 	if err != nil {
-		//TODO 此处可以打印log，显示数据库连接配置信息
 		panic("数据库连接异常！请检查数据库配置文件")
 	}
 	err = orm.Ping()
 	if err != nil {
-		//TODO 此处可以打印log，显示数据库连接配置信息
 		panic("数据库连接异常！请检查数据库配置文件")
 	}
 	//如果是dev模式，需要打印sql语句
@@ -79,21 +71,19 @@ func NewDefaultDb() {
 	xORM["default"] = orm
 }
 
-// NewDb 初始化新的数据库实例.
-func NewDb(instanceName string, dbConfig DBConfig) {
+// MustInitDb
+// 初始化新的数据库实例.
+func MustInitDb(instanceName string, dbConfig DBConfig) {
 	var orm *xorm.Engine
 	var err error
-	//TODO 此处需要dbconfig的配置文件，先自己mock数据吧
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbConfig.DbUser, dbConfig.DbPassword,
 		dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName)
 	orm, err = xorm.NewEngine(dbConfig.DbType, dsn)
 	if err != nil {
-		//TODO 此处可以打印log，显示数据库连接配置信息
 		panic("数据库连接异常！请检查数据库配置文件")
 	}
 	err = orm.Ping()
 	if err != nil {
-		//TODO 此处可以打印log，显示数据库连接配置信息
 		panic("数据库连接异常！请检查数据库配置文件")
 	}
 	//如果是dev模式，需要打印sql语句
@@ -125,7 +115,8 @@ func GetORMByName(instanceName string) *xorm.Engine {
 	return orm
 }
 
-// GetORM 获取默认的数据库连接.
+// GetORM
+// 获取默认的数据库连接.
 func GetORM() *xorm.Engine {
 	return xORM["default"]
 }

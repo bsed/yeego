@@ -27,19 +27,32 @@ var logfile map[string]*os.File
 
 type LogFields logrus.Fields
 
-// LogPath 日志的存储地址，按照时间存储
-var LogPath string = "logs/" + yeeTime.DateFormat(time.Now(), "YYYY-MM-DD")
+// logPath 日志的存储地址，按照时间存储
+var logPath string
+// timePath 日志的存储地址，按照时间存储
+var timePath string = yeeTime.DateFormat(time.Now(), "YYYY-MM-DD") + "/"
 // ESPath es服务器的地址以及端口
-var ESPath string = "http://localhost:9200"
+var eSPath string = "http://localhost:9200"
 // ESFromHost 从哪个host发送过来的
-var ESFromHost string = "localhost"
+var eSFromHost string = "localhost"
 // ESIndex 要存储在哪个index索引下,默认的type为log
-var ESIndex string = "testlog"
+var eSIndex string = "testlog"
+// runMode 运行环境 默认为dev
+var runMode string = "dev"
 
-func Init() {
-	if !yeeFile.FileExists(LogPath) {
-		if createErr := yeeFile.MkdirFile(LogPath); createErr != nil {
-			Print(createErr)
+// MustInitLogs 注册log
+// @param logpath 日志位置
+// @param runmode 运行环境 dev|pro
+func MustInitLogs(path, mode string) {
+	if mode != "" && (mode == "dev" || mode == "pro") {
+		runMode = mode
+	}
+	logPath = path
+	if runMode != "dev" {
+		if !yeeFile.FileExists(logPath) {
+			if createErr := os.MkdirAll(logPath, os.ModePerm); createErr != nil {
+				panic("error to create logs path : " + createErr.Error())
+			}
 		}
 	}
 	day = make(map[string]int)
@@ -53,14 +66,20 @@ func Init() {
 }
 
 // MustInitESErrorLog 为error级别的log注册es
+// @param path es服务器的地址以及端口  eg:http://localhost:9200
+// @param host 从哪个host发送过来的 eg:localhost
+// @param index  要存储在哪个index索引下,默认的type为log eg:dev
 // 有错误则直接panic
-func MustInitESErrorLog() {
+func MustInitESErrorLog(path, host, index string) {
+	eSPath = path
+	eSFromHost = host
+	eSIndex = index
 	//TODO 用的是utc时间需要修改源码为Local
-	client, err := elastic.NewClient(elastic.SetURL(ESPath))
+	client, err := elastic.NewClient(elastic.SetURL(eSPath))
 	if err != nil {
 		panic(err.Error())
 	}
-	hook, err := elogrus.NewElasticHook(client, ESFromHost, logrus.ErrorLevel, ESIndex)
+	hook, err := elogrus.NewElasticHook(client, eSFromHost, logrus.ErrorLevel, eSIndex)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -71,16 +90,21 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 	var err error
 	logger.Level = level
 	logger.Formatter = new(logrus.JSONFormatter)
-	logfile[level.String()], err = os.OpenFile(getLogFullPath(level), os.O_RDWR|os.O_APPEND, 0660)
-	if err != nil {
-		logfile[level.String()], err = os.Create(getLogFullPath(level))
+	if runMode != "dev" {
+		logfile[level.String()], err = os.OpenFile(getLogFullPath(level), os.O_RDWR|os.O_APPEND, 0660)
 		if err != nil {
-			Print(err)
+
+			logfile[level.String()], err = os.Create(getLogFullPath(level))
+			if err != nil {
+				panic("error to create logs path : " + err.Error())
+			}
 		}
 	}
-	//TODO 根据配置的运行模式选择是命令行输出还是文件输出
-	logger.Out = os.Stdout
-	//logger.Out = logfile[level.String()]
+	if runMode == "dev" {
+		logger.Out = os.Stdout
+	} else {
+		logger.Out = logfile[level.String()]
+	}
 	day[level.String()] = yeeTime.Day()
 }
 
@@ -117,24 +141,38 @@ func locate(fields LogFields) LogFields {
 
 // LogDebug 记录Debug信息
 func LogDebug(str interface{}, data LogFields) {
-	//TODO 如果是dev环境，则打印，如果是pro环境，则不打印
-	updateLogFile(logrus.DebugLevel)
+	if debugLogS == nil {
+		panic("please MustInitLogs first")
+	}
+	if runMode != "dev" {
+		updateLogFile(logrus.DebugLevel)
+	}
 	debugLogS.WithFields(logrus.Fields(locate(data))).Debug(str)
 }
 
 // LogInfo 记录Info信息
 func LogInfo(str interface{}, data LogFields) {
-	//TODO 如果是dev环境，则打印，如果是pro环境，则不打印
-	updateLogFile(logrus.InfoLevel)
+	if infoLogS == nil {
+		panic("please MustInitLogs first")
+	}
+	if runMode != "dev" {
+		updateLogFile(logrus.InfoLevel)
+	}
 	infoLogS.WithFields(logrus.Fields(data)).Info(str)
 }
 
 // LogError 记录Error信息
 func LogError(str interface{}, data LogFields) {
-	updateLogFile(logrus.ErrorLevel)
+	if errorLogS == nil {
+		panic("please MustInitLogs first")
+	}
+	if runMode != "dev" {
+		updateLogFile(logrus.ErrorLevel)
+	}
 	errorLogS.WithFields(logrus.Fields(data)).Error(str)
 }
 
 func getLogFullPath(l logrus.Level) string {
-	return LogPath + "." + l.String() + ".log"
+	os.MkdirAll(logPath+timePath, os.ModePerm)
+	return logPath + timePath + l.String() + ".log"
 }
