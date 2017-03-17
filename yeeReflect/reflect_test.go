@@ -5,7 +5,7 @@ package yeeReflect_test
 
 import (
 	"testing"
-	"github.com/agelinazf/yee/yeeReflect"
+	"yeego/yeeReflect"
 	"reflect"
 	"yeego"
 )

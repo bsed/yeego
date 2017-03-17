@@ -6,13 +6,9 @@ package yeego
 import (
 	"strconv"
 	"yeego/validation"
-
 	"errors"
-
 	"regexp"
-
 	"fmt"
-
 	"github.com/labstack/echo"
 )
 
@@ -23,7 +19,6 @@ type Request struct {
 	params *Param
 	//请求校验
 	valid validation.Validation
-
 	//jsonTag
 	jsonTag bool
 	//Json
