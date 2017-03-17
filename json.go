@@ -6,8 +6,7 @@ package yeego
 import (
 	"encoding/json"
 	"strconv"
-
-	"github.com/pkg/errors"
+	"errors"
 )
 
 type Json struct {

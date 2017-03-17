@@ -20,7 +20,6 @@ type Request struct {
 	params *Param
 	//请求校验
 	valid validation.Validation
-
 	//jsonTag
 	jsonTag bool
 	//Json

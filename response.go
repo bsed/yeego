@@ -2,7 +2,6 @@ package yeego
 
 import (
 	"net/http"
-
 	"github.com/labstack/echo"
 )
 
