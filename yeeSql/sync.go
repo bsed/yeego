@@ -7,7 +7,7 @@ package yeeSql
 import (
 	"strings"
 	"fmt"
-	"github.com/agelinazf/egb"
+	"github.com/yeeyuntech/yeego/yeeStrings"
 )
 
 //读取数据库的表字段,不区分大小写(某些系统的mysql不区分大小写)
@@ -131,8 +131,7 @@ func MustCreateTable(table Table) {
 			hasPrimaryKey = true
 		}
 		sqlField := "`" + fieldName + "` " + string(fieldType)
-
-		if !egb.StringListContains(table.Null, fieldName) {
+		if !yeeStrings.IsInSlice(table.Null, fieldName) {
 			sqlField += " NOT NULL"
 		}
 		sqlItemList = append(sqlItemList, sqlField)
@@ -162,7 +161,7 @@ func MustCreateTable(table Table) {
 func MustAddField(table Table, filedName string) {
 	newFieldType := table.FieldList[filedName]
 	sql := "ALTER TABLE `" + table.Name + "` ADD `" + filedName + "` " + string(newFieldType)
-	if egb.StringListContains(table.Null, filedName) {
+	if yeeStrings.IsInSlice(table.Null, filedName) {
 		sql += " NOT NULL"
 	}
 	MustExec(sql)
@@ -191,7 +190,7 @@ func MustModifyTable(table Table) {
 		}
 	}
 	for fieldName, fieldType := range table.FieldList {
-		if !egb.StringListContains(dbFieldNameList, strings.ToLower(fieldName)) {
+		if !yeeStrings.IsInSlice(dbFieldNameList, strings.ToLower(fieldName)) {
 			MustAddField(table, fieldName)
 			continue
 		}
@@ -234,7 +233,7 @@ func MustForceModifyTable(table Table) {
 		}
 	}
 	for fieldName, fieldType := range table.FieldList {
-		if egb.StringListContains(dbFieldNameList, fieldName) {
+		if yeeStrings.IsInSlice(dbFieldNameList, fieldName) {
 			for _, row := range MysqlFieldTypeList {
 				if row.Name == fieldName {
 					if !fieldType.GetMysqlFieldType().Equal(row.Type) {
