@@ -24,6 +24,10 @@ func Equal(get interface{}, expect interface{}, params ...interface{}) {
 	panic("Not Equal")
 }
 
+func OK(input interface{}, params ...interface{}) {
+	Equal(true, input, params...)
+}
+
 // NotEqual get和expect是否不同
 func NotEqual(get interface{}, expect interface{}) {
 	if isEqual(get, expect) {
