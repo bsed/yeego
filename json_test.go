@@ -97,7 +97,7 @@ func TestJson_ToSlice(t *testing.T) {
 	json := mockJsonArrData()
 	data := json.ToSlice()
 	NotEqual(data, nil)
-	Equal(len(data), 6)
+	Equal(len(data), 1)
 }
 
 func TestJson_ToInt(t *testing.T) {

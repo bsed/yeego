@@ -8,7 +8,7 @@ package yeego
 
 import (
 	"reflect"
-	"yeego/yeeReflect"
+	"github.com/yeeyuntech/yeego/yeeReflect"
 )
 
 // Equal get和expect是否相同,不同则panic

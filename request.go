@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"yeego/validation"
 
 	"github.com/labstack/echo"
+	"github.com/yeeyuntech/yeego/validation"
 )
 
 type Request struct {

@@ -6,7 +6,7 @@ package mysqlAst
 
 import (
 	"testing"
-	"yeego"
+	"github.com/yeeyuntech/yeego"
 )
 
 func TestSelectCommand(t *testing.T) {

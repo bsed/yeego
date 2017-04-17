@@ -131,6 +131,7 @@ func MustCreateTable(table Table) {
 			hasPrimaryKey = true
 		}
 		sqlField := "`" + fieldName + "` " + string(fieldType)
+
 		if !egb.StringListContains(table.Null, fieldName) {
 			sqlField += " NOT NULL"
 		}

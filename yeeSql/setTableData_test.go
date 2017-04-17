@@ -6,7 +6,7 @@ package yeeSql_test
 
 import (
 	"testing"
-	"yeego/yeeSql"
+	"github.com/yeeyuntech/yeego/yeeSql"
 )
 
 func TestMustSetTableDataToml(t *testing.T) {

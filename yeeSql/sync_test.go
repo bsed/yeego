@@ -6,11 +6,10 @@ package yeeSql_test
 
 import (
 	"testing"
-	"yeego/yeeSql"
-
-	"yeego"
 	"strings"
 	"fmt"
+	"github.com/yeeyuntech/yeego"
+	"github.com/yeeyuntech/yeego/yeeSql"
 )
 
 func initTestDbTable() {

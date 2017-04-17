@@ -5,9 +5,9 @@ package yeeReflect_test
 
 import (
 	"testing"
-	"yeego/yeeReflect"
 	"reflect"
-	"yeego"
+	"github.com/yeeyuntech/yeego"
+	"github.com/yeeyuntech/yeego/yeeReflect"
 )
 
 type a struct {
@@ -16,7 +16,8 @@ type a struct {
 func TestGetTypeFullName(t *testing.T) {
 	yeego.Equal(yeeReflect.GetTypeFullName(reflect.TypeOf("")), "string")
 	yeego.Equal(yeeReflect.GetTypeFullName(reflect.TypeOf(1)), "int")
-	yeego.Equal(yeeReflect.GetTypeFullName(reflect.TypeOf(&a{})), "yeego/yeeReflect_test.a")
+	yeego.Equal(yeeReflect.GetTypeFullName(reflect.TypeOf(&a{})),
+		"_/Users/angelina/Workspace/golib/src/github.com/yeeyuntech/yeego/yeeReflect_test.a")
 }
 
 func TestIndirectType(t *testing.T) {

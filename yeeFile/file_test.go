@@ -5,8 +5,8 @@ package yeeFile_test
 
 import (
 	"testing"
-	"yeego"
-	"yeego/yeeFile"
+	"github.com/yeeyuntech/yeego"
+	"github.com/yeeyuntech/yeego/yeeFile"
 )
 
 var TestDir string = "data"

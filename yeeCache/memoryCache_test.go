@@ -5,8 +5,8 @@ package yeeCache
 
 import (
 	"testing"
-	"yeego"
 	"time"
+	"github.com/yeeyuntech/yeego"
 )
 
 func TestNewMemoryCache(t *testing.T) {

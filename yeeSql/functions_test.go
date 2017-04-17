@@ -5,9 +5,9 @@
 package yeeSql_test
 
 import (
-	"yeego/yeeSql"
 	"testing"
-	"yeego"
+	"github.com/yeeyuntech/yeego"
+	"github.com/yeeyuntech/yeego/yeeSql"
 )
 
 var (

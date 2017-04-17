@@ -13,10 +13,10 @@ import (
 	"gopkg.in/sohlich/elogrus.v2"
 	"gopkg.in/olivere/elastic.v5"
 	"os"
-	"yeego/yeeFile"
+	"github.com/yeeyuntech/yeego/yeeFile"
 	"time"
 	"runtime"
-	"yeego/yeeTime"
+	"github.com/yeeyuntech/yeego/yeeTime"
 )
 
 var infoLogS *logrus.Logger
