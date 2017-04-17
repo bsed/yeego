@@ -7,8 +7,8 @@ package yeeSql
 import (
 	"fmt"
 	"strconv"
-	"github.com/agelinazf/egb"
 	"strings"
+	"github.com/yeeyuntech/yeego/yeeStrconv"
 )
 
 type MysqlField struct {
@@ -46,7 +46,7 @@ func (t1 MysqlFieldType) String() string {
 	}
 	switch t1.DataType {
 	case MysqlDataTypeInt32, MysqlDataTypeInt8, MysqlDataTypeFloat:
-		out += " DEFAULT " + strconv.Itoa(egb.StringToInt(t1.Default))
+		out += " DEFAULT " + strconv.Itoa(yeeStrconv.AtoIDefault0(t1.Default))
 	case MysqlDataTypeVarchar, MysqlDataTypeDateTime:
 		// TODO 正确的序列化方式
 		out += " DEFAULT " + fmt.Sprintf("%#v", t1.Default)
@@ -81,7 +81,7 @@ WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?`, GetDbConfig().DbName, tableName)
 		case MysqlDataTypeVarchar:
 			field.CharacterSetName = row["CHARACTER_SET_NAME"]
 			field.CollationName = row["COLLATION_NAME"]
-			field.StringLength = egb.StringToInt(row["CHARACTER_MAXIMUM_LENGTH"])
+			field.StringLength = yeeStrconv.AtoIDefault0(row["CHARACTER_MAXIMUM_LENGTH"])
 		case MysqlDataTypeLongText:
 			field.CharacterSetName = row["CHARACTER_SET_NAME"]
 			field.CollationName = row["COLLATION_NAME"]
