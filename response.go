@@ -5,6 +5,15 @@ import (
 	"github.com/labstack/echo"
 )
 
+const (
+	// DefaultCode
+	// 默认错误码0：无错误
+	DefaultCode = 0
+	// DefaultHttpStatus
+	// 默认的http状态码200
+	DefaultHttpStatus = http.StatusOK
+)
+
 // ResParams
 // 返回的参数封装
 type ResParams struct {
@@ -13,21 +22,8 @@ type ResParams struct {
 	Msg  string      `json:"msg";xml:"msg"`   // 消息
 }
 
-// DefaultCode
-// 默认错误码0：无错误
-const DefaultCode = 0
-
-// DefaultHttpStatus
-// 默认的http状态码200
-const DefaultHttpStatus = http.StatusOK
-
-var (
-	//返回类型，1是json，2是xml
-	ReturnType int = 1
-)
-
 // Response
-// 对返回的组合
+// 对返回的组合封装
 type Response struct {
 	Context    echo.Context
 	params     *ResParams
@@ -38,6 +34,15 @@ type Response struct {
 // 新建一个返回
 func NewResponse(c echo.Context) *Response {
 	return &Response{Context: c, params: new(ResParams), HttpStatus: DefaultHttpStatus}
+}
+
+// SetRetType
+// 设置返回类型
+func (resp *Response) SetRetType(i int) {
+	if !(i == RETJSON || i == RETXML) {
+		panic("RetType 类型错误l")
+	}
+	ReturnType = i
 }
 
 // SetStatus
