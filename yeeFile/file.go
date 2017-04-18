@@ -17,8 +17,9 @@ import (
 	"path/filepath"
 )
 
-// FileGetBytes 通过给定的文件名称或者url地址以及超时时间获取文件的[]byte数据.
-func FileGetBytes(filenameOrURL string, timeout ...time.Duration) ([]byte, error) {
+// GetBytes
+// 通过给定的文件名称或者url地址以及超时时间获取文件的[]byte数据.
+func GetBytes(filenameOrURL string, timeout ...time.Duration) ([]byte, error) {
 	if strings.Contains(filenameOrURL, "://") {
 		if strings.Index(filenameOrURL, "file://") == 0 {
 			filenameOrURL = filenameOrURL[len("file://"):]
@@ -41,13 +42,15 @@ func FileGetBytes(filenameOrURL string, timeout ...time.Duration) ([]byte, error
 	return ioutil.ReadFile(filenameOrURL)
 }
 
-// FileSetBytes 向指定的文件设置[]byte内容.
-func FileSetBytes(filename string, data []byte) error {
+// SetBytes
+// 向指定的文件设置[]byte内容.
+func SetBytes(filename string, data []byte) error {
 	return ioutil.WriteFile(filename, data, 0660)
 }
 
-// FileAppendBytes 向指定的文件追加[]byte内容.
-func FileAppendBytes(filename string, data []byte) error {
+// AppendBytes
+// 向指定的文件追加[]byte内容.
+func AppendBytes(filename string, data []byte) error {
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
 		return err
@@ -57,33 +60,38 @@ func FileAppendBytes(filename string, data []byte) error {
 	return err
 }
 
-// FileGetString 通过给定的文件名称或者url地址以及超时时间获取文件的string数据.
-func FileGetString(filenameOrURL string, timeout ...time.Duration) (string, error) {
-	bytes, err := FileGetBytes(filenameOrURL, timeout...)
+// GetString
+// 通过给定的文件名称或者url地址以及超时时间获取文件的string数据.
+func GetString(filenameOrURL string, timeout ...time.Duration) (string, error) {
+	bytes, err := GetBytes(filenameOrURL, timeout...)
 	if err != nil {
 		return "", err
 	}
 	return string(bytes), nil
 }
 
-// FileSetString 向指定的文件设置string内容.
-func FileSetString(filename string, data string) error {
-	return FileSetBytes(filename, []byte(data))
+// SetString
+// 向指定的文件设置string内容.
+func SetString(filename string, data string) error {
+	return SetBytes(filename, []byte(data))
 }
 
-// FileAppendString 向指定的文件追加string内容.
-func FileAppendString(filename string, data string) error {
-	return FileAppendBytes(filename, []byte(data))
+// AppendString
+// 向指定的文件追加string内容.
+func AppendString(filename string, data string) error {
+	return AppendBytes(filename, []byte(data))
 }
 
-// FileExists 文件或者文件夹是否存在.
+// FileExists
+// 文件或者文件夹是否存在.
 func FileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil
 }
 
-// MkdirFile 创建文件夹
-func MkdirFile(path string) error {
+// Mkdir
+// 创建文件夹
+func Mkdir(path string) error {
 	err := os.MkdirAll(path, os.ModePerm) //在当前目录下生成md目录
 	if err != nil {
 		return err
@@ -91,7 +99,8 @@ func MkdirFile(path string) error {
 	return nil
 }
 
-// FileTimeModified 返回文件的最后修改时间
+// FileTimeModified
+// 返回文件的最后修改时间
 // 如果有错误则返回空time.Time.
 func FileTimeModified(filename string) time.Time {
 	info, err := os.Stat(filename)
@@ -101,14 +110,16 @@ func FileTimeModified(filename string) time.Time {
 	return info.ModTime()
 }
 
-// FileIsDir 判断是否是文件夹.
-func FileIsDir(dirname string) bool {
+// IsDir
+// 判断是否是文件夹.
+func IsDir(dirname string) bool {
 	info, err := os.Stat(dirname)
 	return err == nil && info.IsDir()
 }
 
-// FileFind 在给定的文件夹中查找某文件.
-func FileFind(searchDirs []string, filenames ...string) (filePath string, found bool) {
+// Find
+// 在给定的文件夹中查找某文件.
+func Find(searchDirs []string, filenames ...string) (filePath string, found bool) {
 	for _, dir := range searchDirs {
 		for _, filename := range filenames {
 			filePath = path.Join(dir, filename)
@@ -120,8 +131,9 @@ func FileFind(searchDirs []string, filenames ...string) (filePath string, found 
 	return "", false
 }
 
-// FileGetPrefix 获取文件的前缀.
-func FileGetPrefix(filename string) string {
+// GetPrefix
+// 获取文件的前缀.
+func GetPrefix(filename string) string {
 	for i := len(filename) - 1; i >= 0; i-- {
 		if filename[i] == '.' {
 			return filename[0:i]
@@ -130,18 +142,20 @@ func FileGetPrefix(filename string) string {
 	return ""
 }
 
-// FileGetExt 获取文件的后缀.
-func FileGetExt(filename string) string {
+// GetExt
+// 获取文件的后缀.
+func GetExt(filename string) string {
 	for i := len(filename) - 1; i >= 0; i-- {
 		if filename[i] == '.' {
-			return filename[i + 1:]
+			return filename[i+1:]
 		}
 	}
 	return ""
 }
 
-// FileCopy 将文件从原地址拷贝到目的地.
-func FileCopy(source string, dest string) (err error) {
+// Copy
+// 将文件从原地址拷贝到目的地.
+func Copy(source string, dest string) (err error) {
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		return err
@@ -162,7 +176,8 @@ func FileCopy(source string, dest string) (err error) {
 	return err
 }
 
-// DirSize 返回文件夹的大小
+// DirSize
+// 返回文件夹的大小
 func DirSize(path string) int64 {
 	var dirSize int64 = 0
 	readSize := func(path string, file os.FileInfo, err error) error {

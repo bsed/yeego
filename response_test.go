@@ -25,3 +25,13 @@ func TestResponse_Success(t *testing.T) {
 	resp := mockResponse("/")
 	Equal(resp.Success("成功"), nil)
 }
+
+func TestResponse_SetStatus(t *testing.T) {
+	resp := mockResponse("/")
+	resp.SetStatus(500)
+	Equal(resp.Success("成功"), nil)
+	Equal(resp.Context.Response().Status, 500)
+	resp = mockResponse("/")
+	Equal(resp.Success("成功"), nil)
+	Equal(resp.Context.Response().Status, 200)
+}

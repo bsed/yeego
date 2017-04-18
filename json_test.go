@@ -1,10 +1,10 @@
 /**
  * Created by WillkYang on 2017/3/6.
  */
+
 package yeego
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -118,10 +118,8 @@ func TestJson_ToString(t *testing.T) {
 func TestJson_ToArray(t *testing.T) {
 	json := mockJsonData()
 	k, v := json.ToArray()
-	fmt.Println(k, v)
 	NotEqual(k, nil)
 	NotEqual(v, nil)
-
 	json1 := mockJsonArrData()
 	k1, v1 := json1.ToArray()
 	NotEqual(k1, nil)
@@ -131,6 +129,6 @@ func TestJson_ToArray(t *testing.T) {
 func TestJson_StringToArray(t *testing.T) {
 	json := InitJson(`["data1","data2"]`)
 	data := json.StringToArray()
-	fmt.Println(data)
-	NotEqual(data, nil)
+	Equal(data[0], "data1")
+	Equal(data[1], "data2")
 }

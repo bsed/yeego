@@ -1,6 +1,7 @@
 /**
  * Created by WillkYang on 2017/3/6.
  */
+
 package yeego
 
 import (
@@ -9,10 +10,14 @@ import (
 	"errors"
 )
 
+// Json
+// 接口类型，可以包含全部东西
 type Json struct {
 	Data interface{}
 }
 
+// InitJson
+// 根据data初始化Json数据
 func InitJson(data string) *Json {
 	j := new(Json)
 	var jsonData interface{}
@@ -23,7 +28,19 @@ func InitJson(data string) *Json {
 	return j
 }
 
-//return json data by key
+// GetData
+// return JsonData in map type
+// 将data转为map类型
+func (j *Json) GetData() map[string]interface{} {
+	if mapData, ok := (j.Data).(map[string]interface{}); ok {
+		return mapData
+	}
+	return nil
+}
+
+// Get
+// return json data by key
+// 根据key获取数据
 func (j *Json) Get(key string) *Json {
 	mapData := j.GetData()
 	if value, ok := mapData[key]; ok {
@@ -34,26 +51,20 @@ func (j *Json) Get(key string) *Json {
 	return j
 }
 
-//return JsonData in map type
-func (j *Json) GetData() map[string]interface{} {
-	if mapData, ok := (j.Data).(map[string]interface{}); ok {
-		return mapData
-	}
-	return nil
-}
-
-//return Json of index n; warning that index is no unique
+// GetIndex
+// return Json of index n;
+// warning that index is no unique
+// 如果data是切片，获取地index个元素
+// 如果data是map，获取key为index的数据
 func (j *Json) GetIndex(index int) *Json {
 	num := index - 1
 	if arrData, ok := (j.Data).([]interface{}); ok {
 		j.Data = arrData[num]
 		return j
 	}
-
 	if mapData, ok := (j.Data).(map[string]interface{}); ok {
 		n := 0
 		data := make(map[string]interface{})
-
 		for k, v := range mapData {
 			if n == num {
 				switch vv := v.(type) {
@@ -77,7 +88,10 @@ func (j *Json) GetIndex(index int) *Json {
 	return j
 }
 
-//return json of arr and key;  json data type must be [](map[string]interface{})
+// GetKey
+// return json of arr and key;
+// json data type must be [](map[string]interface{})
+// data必须是map[string]interface{}类型的切片
 func (j *Json) GetKey(key string, index int) *Json {
 	num := index - 1
 	arrData, ok := (j.Data).([]interface{})
@@ -88,7 +102,6 @@ func (j *Json) GetKey(key string, index int) *Json {
 		j.Data = errors.New("index out of range list").Error()
 		return j
 	}
-
 	if v, ok := arrData[num].(map[string]interface{}); ok {
 		if vv, ok := v[key]; ok {
 			j.Data = vv
@@ -99,7 +112,8 @@ func (j *Json) GetKey(key string, index int) *Json {
 	return j
 }
 
-//return json by multi key
+// GetPath
+// return json by multi key
 func (j *Json) GetPath(args ...string) *Json {
 	d := j
 	for _, v := range args {
@@ -114,7 +128,9 @@ func (j *Json) GetPath(args ...string) *Json {
 	return d
 }
 
-//return string index of json; json data type must be []interface{}
+// ArrayIndex
+// return string index of json;
+// json data type must be []interface{}
 func (j *Json) ArrayIndex(index int) string {
 	num := index - 1
 	arrData, ok := (j.Data).([]interface{})
@@ -155,7 +171,7 @@ func (j *Json) ToInt() int {
 		return int(data)
 	}
 	if data, ok := (j.Data).(string); ok {
-		if data, err := strconv.ParseInt(data, 10, 64); err != nil {
+		if data, err := strconv.ParseInt(data, 10, 0); err != nil {
 			return int(data)
 		}
 	}
@@ -202,7 +218,6 @@ func (j *Json) ToArray() (k, v []string) {
 		}
 		return
 	}
-
 	if data, ok := (j.Data).(map[string]interface{}); ok {
 		for key, value := range data {
 			switch vv := value.(type) {

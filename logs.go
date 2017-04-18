@@ -27,20 +27,27 @@ var logfile map[string]*os.File
 
 type LogFields logrus.Fields
 
-// logPath 日志的存储地址，按照时间存储
+// logPath
+// 日志的存储地址，按照时间存储
 var logPath string
-// timePath 日志的存储地址，按照时间存储
+// timePath
+// 日志的存储地址，按照时间存储
 var timePath string = yeeTime.DateFormat(time.Now(), "YYYY-MM-DD") + "/"
-// ESPath es服务器的地址以及端口
+// ESPath
+// es服务器的地址以及端口
 var eSPath string = "http://localhost:9200"
-// ESFromHost 从哪个host发送过来的
+// ESFromHost
+// 从哪个host发送过来的
 var eSFromHost string = "localhost"
-// ESIndex 要存储在哪个index索引下,默认的type为log
+// ESIndex
+// 要存储在哪个index索引下,默认的type为log
 var eSIndex string = "testlog"
-// runMode 运行环境 默认为dev
+// runMode
+// 运行环境 默认为dev
 var runMode string = "dev"
 
-// MustInitLogs 注册log
+// MustInitLogs
+// 注册log
 // @param logpath 日志位置
 // @param runmode 运行环境 dev|pro
 func MustInitLogs(path, mode string) {
@@ -65,7 +72,8 @@ func MustInitLogs(path, mode string) {
 	setLogSConfig(errorLogS, logrus.ErrorLevel)
 }
 
-// MustInitESErrorLog 为error级别的log注册es
+// MustInitESErrorLog
+// 为error级别的log注册es
 // @param path es服务器的地址以及端口  eg:http://localhost:9200
 // @param host 从哪个host发送过来的 eg:localhost
 // @param index  要存储在哪个index索引下,默认的type为log eg:dev
@@ -108,7 +116,8 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 	day[level.String()] = yeeTime.Day()
 }
 
-// updateLogFile 检测是否跨天了,把记录记录到新的文件目录中
+// updateLogFile
+// 检测是否跨天了,把记录记录到新的文件目录中
 func updateLogFile(level logrus.Level) {
 	var err error
 	day2 := yeeTime.Day()
@@ -129,7 +138,8 @@ func updateLogFile(level logrus.Level) {
 	}
 }
 
-// locate 找到是哪个文件的哪个地方打出的log
+// locate
+// 找到是哪个文件的哪个地方打出的log
 func locate(fields LogFields) LogFields {
 	_, path, line, ok := runtime.Caller(2)
 	if ok {
@@ -139,7 +149,8 @@ func locate(fields LogFields) LogFields {
 	return fields
 }
 
-// LogDebug 记录Debug信息
+// LogDebug
+// 记录Debug信息
 func LogDebug(str interface{}, data LogFields) {
 	if debugLogS == nil {
 		panic("please MustInitLogs first")
@@ -150,7 +161,8 @@ func LogDebug(str interface{}, data LogFields) {
 	debugLogS.WithFields(logrus.Fields(locate(data))).Debug(str)
 }
 
-// LogInfo 记录Info信息
+// LogInfo
+// 记录Info信息
 func LogInfo(str interface{}, data LogFields) {
 	if infoLogS == nil {
 		panic("please MustInitLogs first")
@@ -161,7 +173,8 @@ func LogInfo(str interface{}, data LogFields) {
 	infoLogS.WithFields(logrus.Fields(data)).Info(str)
 }
 
-// LogError 记录Error信息
+// LogError
+// 记录Error信息
 func LogError(str interface{}, data LogFields) {
 	if errorLogS == nil {
 		panic("please MustInitLogs first")

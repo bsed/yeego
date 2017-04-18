@@ -34,12 +34,14 @@ func Md5Hex(data []byte) string {
 	return hex.EncodeToString(hash.Sum(nil))
 }
 
-// HashPassword 密码加密
+// HashPassword
+// 密码加密
 func HashPassword(password []byte) ([]byte, error) {
 	return bcrypt.GenerateFromPassword(password, 0)
 }
 
-// CheckPasswordHash 加密后的密码的校验
+// CheckPasswordHash
+// 加密后的密码的校验
 func CheckPasswordHash(hash, password []byte) error {
 	return bcrypt.CompareHashAndPassword(hash, password)
 }

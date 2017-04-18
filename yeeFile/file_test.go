@@ -15,14 +15,14 @@ var TestFileName string = "test.txt"
 var TestString string = "Hello!"
 
 func TestFileGetString(t *testing.T) {
-	str, err := yeeFile.FileGetString(TestPath)
+	str, err := yeeFile.GetString(TestPath)
 	yeego.Equal(err, nil)
 	yeego.Equal(str, TestString)
 }
 
 func TestFileSetString(t *testing.T) {
-	yeeFile.FileSetString(TestPath, "xxx")
-	str, _ := yeeFile.FileGetString(TestPath)
+	yeeFile.SetString(TestPath, "xxx")
+	str, _ := yeeFile.GetString(TestPath)
 	yeego.Equal(str, "xxx")
-	yeeFile.FileSetString(TestPath, TestString)
+	yeeFile.SetString(TestPath, TestString)
 }

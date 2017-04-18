@@ -10,35 +10,41 @@ import (
 	"strconv"
 )
 
-// Year 获取本年 整型
+// Year
+// 获取本年 整型
 func Year() int {
 	return time.Now().Year()
 }
 
-// Month 获取本月
+// Month
+// 获取本月
 func Month() time.Month {
 	now := time.Now()
 	_, month, _ := now.Date()
 	return month
 }
 
-// Day 获取本日
+// Day
+// 获取本日
 func Day() int {
 	return time.Now().Day()
 }
 
-// Week 获取本日在这周是周几
+// Week
+// 获取本日在这周是周几
 func Week() time.Weekday {
 	now := time.Now()
 	return now.Weekday()
 }
 
-// TimeToUnix 转换为10位的unix时间戳 精确到秒
+// TimeToUnix
+// 转换为10位的unix时间戳 精确到秒
 func TimeToUnixS(t time.Time) string {
 	return strconv.FormatInt(t.Unix(), 10)
 }
 
-// UnixSToTime 10位的unix时间戳转换为time.Time
+// UnixSToTime
+// 10位的unix时间戳转换为time.Time
 func UnixSToTime(st string) time.Time {
 	stInt, _ := strconv.Atoi(st)
 	return time.Unix(int64(stInt), 0)

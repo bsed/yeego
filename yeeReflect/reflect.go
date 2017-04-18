@@ -7,7 +7,8 @@ package yeeReflect
 
 import "reflect"
 
-// IsNil 判断是否为空,首先对类型判断,如果未知类型,直接为空
+// IsNil
+// 判断是否为空,首先对类型判断,如果未知类型,直接为空
 func IsNil(v reflect.Value) bool {
 	switch v.Kind() {
 	case reflect.Invalid:
@@ -19,7 +20,8 @@ func IsNil(v reflect.Value) bool {
 	}
 }
 
-// GetTypeName 获取类型的名称
+// GetTypeName
+// 获取类型的名称
 func GetTypeFullName(t reflect.Type) string {
 	if t.Kind() == reflect.Ptr {
 		return GetTypeFullName(t.Elem())
@@ -33,7 +35,8 @@ func GetTypeFullName(t reflect.Type) string {
 	return t.PkgPath() + "." + t.Name()
 }
 
-// IndirectType 获取真实类型
+// IndirectType
+// 获取真实类型
 func IndirectType(v reflect.Type) reflect.Type {
 	switch v.Kind() {
 	case reflect.Ptr:
@@ -44,7 +47,8 @@ func IndirectType(v reflect.Type) reflect.Type {
 	return v
 }
 
-// StructGetAllField 获取每个结构体的全部字段信息
+// StructGetAllField
+// 获取每个结构体的全部字段信息
 func StructGetAllField(t reflect.Type) []*reflect.StructField {
 	fieldMap := make(map[string]bool)
 	return structGetAllField(t, fieldMap, []int{})

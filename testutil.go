@@ -11,7 +11,8 @@ import (
 	"github.com/yeeyuntech/yeego/yeeReflect"
 )
 
-// Equal get和expect是否相同,不同则panic
+// Equal
+// get和expect是否相同,不同则panic
 func Equal(get interface{}, expect interface{}, params ...interface{}) {
 	if isEqual(get, expect) {
 		return
@@ -24,11 +25,14 @@ func Equal(get interface{}, expect interface{}, params ...interface{}) {
 	panic("Not Equal")
 }
 
+// OK
+// input是否等于true
 func OK(input interface{}, params ...interface{}) {
 	Equal(true, input, params...)
 }
 
-// NotEqual get和expect是否不同
+// NotEqual
+// get和expect是否不同
 func NotEqual(get interface{}, expect interface{}) {
 	if isEqual(get, expect) {
 		panic("Equal")

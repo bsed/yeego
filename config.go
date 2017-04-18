@@ -21,7 +21,6 @@ func MustInitConfig(filePath string, fileName string) {
 	} else {
 		Config.AddConfigPath(filePath + "/")
 	}
-	fmt.Println(GetCurrentPath() + "/" + filePath + "/" + fileName)
 	if err := Config.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err).Error())
 	}

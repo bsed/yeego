@@ -37,7 +37,8 @@ type cache struct {
 	monitor *monitor
 }
 
-// newCache 初始化
+// newCache
+// 初始化
 func newCache(defaultExpiration time.Duration, m map[string]Item) *cache {
 	if defaultExpiration == 0 {
 		defaultExpiration = -1
@@ -49,7 +50,8 @@ func newCache(defaultExpiration time.Duration, m map[string]Item) *cache {
 	return c
 }
 
-// Set 存储数据，如果存在则替换
+// Set
+// 存储数据，如果存在则替换
 func (c *cache) Set(k string, v interface{}, d time.Duration) {
 	var e int64
 	if d == DefaultExpiration {
@@ -60,13 +62,14 @@ func (c *cache) Set(k string, v interface{}, d time.Duration) {
 	}
 	c.mu.Lock()
 	c.items[k] = Item{
-		Object:    v,
-		Expiration:e,
+		Object:     v,
+		Expiration: e,
 	}
 	c.mu.Unlock()
 }
 
-// SetDefault 默认过期时间
+// SetDefault
+// 默认过期时间
 func (c *cache) SetDefault(k string, v interface{}) {
 	c.Set(k, v, c.defaultExpiration)
 }
@@ -80,12 +83,13 @@ func (c *cache) set(k string, v interface{}, d time.Duration) {
 		e = time.Now().Add(d).UnixNano()
 	}
 	c.items[k] = Item{
-		Object:    v,
-		Expiration:e,
+		Object:     v,
+		Expiration: e,
 	}
 }
 
-// Add 添加数据，如果已经存在，则报错
+// Add
+// 添加数据，如果已经存在，则报错
 func (c *cache) Add(k string, v interface{}, d time.Duration) error {
 	c.mu.Lock()
 	_, found := c.get(k)
@@ -98,6 +102,8 @@ func (c *cache) Add(k string, v interface{}, d time.Duration) error {
 	return nil
 }
 
+// Replace
+// 替换
 func (c *cache) Replace(k string, v interface{}, d time.Duration) error {
 	c.mu.Lock()
 	_, found := c.get(k)
@@ -110,7 +116,8 @@ func (c *cache) Replace(k string, v interface{}, d time.Duration) error {
 	return nil
 }
 
-// Get 获取数据，如果不存在，返回nil,false
+// Get
+// 获取数据，如果不存在，返回nil,false
 func (c *cache) Get(k string) (interface{}, bool) {
 	c.mu.RLock()
 	item, found := c.items[k]
@@ -141,7 +148,8 @@ func (c *cache) get(k string) (interface{}, bool) {
 	return item.Object, true
 }
 
-// Delete 删除某个key
+// Delete
+// 删除某个key
 func (c *cache) Delete(k string) {
 	c.mu.Lock()
 	v, found := c.delete(k)
@@ -162,7 +170,8 @@ func (c *cache) delete(k string) (interface{}, bool) {
 	return nil, false
 }
 
-// Items 获取全部未过期的数据
+// Items
+// 获取全部未过期的数据
 func (c *cache) Items() map[string]Item {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -179,7 +188,8 @@ func (c *cache) Items() map[string]Item {
 	return m
 }
 
-// ItemCount 获取已缓存的数量
+// ItemCount
+// 获取已缓存的数量
 // 其中包含了那些已经过期但是没有被清理的
 func (c *cache) ItemCount() int {
 	c.mu.RLock()
@@ -188,7 +198,8 @@ func (c *cache) ItemCount() int {
 	return n
 }
 
-// Flush 清空全部的缓存
+// Flush
+// 清空全部的缓存
 func (c *cache) Flush() {
 	c.mu.Lock()
 	c.items = map[string]Item{}
@@ -200,7 +211,8 @@ type KV struct {
 	value interface{}
 }
 
-// DeleteExpired 删除过期的数据
+// DeleteExpired
+// 删除过期的数据
 func (c *cache) DeleteExpired() {
 	var items []KV
 	now := time.Now().UnixNano()
@@ -209,7 +221,7 @@ func (c *cache) DeleteExpired() {
 		if v.Expiration > 0 && now > v.Expiration {
 			data, found := c.delete(k)
 			if found {
-				items = append(items, KV{key:k, value:data})
+				items = append(items, KV{key: k, value: data})
 			}
 		}
 	}
@@ -219,13 +231,15 @@ func (c *cache) DeleteExpired() {
 	}
 }
 
-// Item 缓存的数据的结构
+// Item
+// 缓存的数据的结构
 type Item struct {
 	Object     interface{}
 	Expiration int64
 }
 
-// Expired 判断数据是否过期
+// Expired
+// 判断数据是否过期
 func (item *Item) Expired() bool {
 	if item.Expiration == 0 {
 		return false
@@ -233,13 +247,15 @@ func (item *Item) Expired() bool {
 	return time.Now().UnixNano() > item.Expiration
 }
 
-// monitor 循环监控过期数据
+// monitor
+// 循环监控过期数据
 type monitor struct {
 	Interval time.Duration
 	stop     chan bool
 }
 
-// run 不断循环
+// run
+// 不断循环
 func (m *monitor) run(c *cache) {
 	m.stop = make(chan bool)
 	ticker := time.NewTicker(m.Interval)
@@ -254,21 +270,24 @@ func (m *monitor) run(c *cache) {
 	}
 }
 
-// stopMonitor 停止
+// stopMonitor
+// 停止
 func stopMonitor(c *MemoryCache) {
 	c.monitor.stop <- true
 }
 
-// runMonitor 开启监控
+// runMonitor
+// 开启监控
 func runMonitor(c *cache, ci time.Duration) {
 	m := &monitor{
-		Interval:ci,
+		Interval: ci,
 	}
 	c.monitor = m
 	go m.run(c)
 }
 
-// newMemoryCacheWithMonitor 初始化缓存，同时开启监控routine
+// newMemoryCacheWithMonitor
+// 初始化缓存，同时开启监控routine
 func newMemoryCacheWithMonitor(de time.Duration, ci time.Duration, m map[string]Item) *MemoryCache {
 	c := newCache(de, m)
 	MC := &MemoryCache{c}
@@ -279,13 +298,15 @@ func newMemoryCacheWithMonitor(de time.Duration, ci time.Duration, m map[string]
 	return MC
 }
 
-// NewMemoryCache 初始化内存缓存
+// NewMemoryCache
+// 初始化内存缓存
 func NewMemoryCache(defaultExpiration, cleanupInterval time.Duration) *MemoryCache {
 	items := make(map[string]Item)
 	return newMemoryCacheWithMonitor(defaultExpiration, cleanupInterval, items)
 }
 
-// NewMemoryCache 初始化内存缓存
+// NewMemoryCache
+// 初始化内存缓存
 // 可以传入map数据
 func NewMemoryCacheWithMap(defaultExpiration, cleanupInterval time.Duration, items map[string]Item) *MemoryCache {
 	return newMemoryCacheWithMonitor(defaultExpiration, cleanupInterval, items)
