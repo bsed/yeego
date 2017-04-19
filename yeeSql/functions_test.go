@@ -29,7 +29,7 @@ var (
 		UniqueKey: [][]string{
 			[]string{"Id"},
 		},
-		Null: []string{"Name", "Pwd"},
+		NotNull: []string{"Name", "Pwd"},
 	}
 	tomlData = `
 				[[testTable]]

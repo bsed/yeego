@@ -25,30 +25,27 @@ type ResParams struct {
 // Response
 // 对返回的组合封装
 type Response struct {
-	Context    echo.Context
+	context    echo.Context
 	params     *ResParams
-	HttpStatus int
+	httpStatus int
 }
 
 // NewResponse
 // 新建一个返回
 func NewResponse(c echo.Context) *Response {
-	return &Response{Context: c, params: new(ResParams), HttpStatus: DefaultHttpStatus}
+	return &Response{context: c, params: new(ResParams), httpStatus: DefaultHttpStatus}
 }
 
-// SetRetType
-// 设置返回类型
-func (resp *Response) SetRetType(i int) {
-	if !(i == RETJSON || i == RETXML) {
-		panic("RetType 类型错误l")
-	}
-	ReturnType = i
+// Context
+// 返回resp的Context
+func (resp *Response) Context() echo.Context {
+	return resp.context
 }
 
 // SetStatus
 // 设置返回状态码
 func (resp *Response) SetStatus(status int) {
-	resp.HttpStatus = status
+	resp.httpStatus = status
 }
 
 // SetMsg
@@ -93,15 +90,15 @@ func (resp *Response) Success(d interface{}) error {
 func (resp *Response) Ret(par interface{}) error {
 	switch ReturnType {
 	case 2:
-		return resp.Context.XML(resp.HttpStatus, par)
+		return resp.context.XML(resp.httpStatus, par)
 	default:
-		return resp.Context.JSON(resp.HttpStatus, par)
+		return resp.context.JSON(resp.httpStatus, par)
 	}
 }
 
 // Write
 // 返回row数据
 func (resp *Response) Write(data []byte) error {
-	_, err := resp.Context.Response().Write(data)
+	_, err := resp.context.Response().Write(data)
 	return err
 }

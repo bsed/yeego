@@ -29,6 +29,14 @@ func NewEcho() *echo.Echo {
 	return Echo
 }
 
+// NewReqAndRes
+// 根据echo.Context初始化request&response
+func NewReqAndRes(c echo.Context) (req *Request, res *Response) {
+	req = NewRequest(c)
+	res = NewResponse(c)
+	return
+}
+
 // StaticFiles
 // 设置静态目录
 // Static("/static", "assets")

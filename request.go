@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"github.com/labstack/echo"
 	"github.com/yeeyuntech/yeego/validation"
+	"net/http"
 )
 
 // Request
@@ -49,6 +50,28 @@ type JsonParam struct {
 func NewRequest(c echo.Context) *Request {
 	r := &Request{context: c}
 	return r
+}
+
+// Context
+// 返回req的Context
+func (req *Request) Context() echo.Context {
+	return req.context
+}
+
+// SetCookie
+// 设置cookie
+func (req *Request) SetCookie(cookie *http.Cookie) {
+	req.Context().SetCookie(cookie)
+}
+
+// GetCookie
+// 根据名称获取cookie,不存在则nil
+func (req *Request) GetCookie(cookieName string) *http.Cookie {
+	cookie, err := req.Context().Cookie(cookieName)
+	if err != nil {
+		return nil
+	}
+	return cookie
 }
 
 // GetParam

@@ -17,7 +17,7 @@ type Table struct {
 	FieldList  map[string]DbType
 	PrimaryKey string
 	UniqueKey  [][]string
-	Null       []string
+	NotNull    []string
 }
 
 type DbType string
@@ -131,7 +131,7 @@ func MustCreateTable(table Table) {
 			hasPrimaryKey = true
 		}
 		sqlField := "`" + fieldName + "` " + string(fieldType)
-		if !yeeStrings.IsInSlice(table.Null, fieldName) {
+		if yeeStrings.IsInSlice(table.NotNull, fieldName) {
 			sqlField += " NOT NULL"
 		}
 		sqlItemList = append(sqlItemList, sqlField)
@@ -161,7 +161,7 @@ func MustCreateTable(table Table) {
 func MustAddField(table Table, filedName string) {
 	newFieldType := table.FieldList[filedName]
 	sql := "ALTER TABLE `" + table.Name + "` ADD `" + filedName + "` " + string(newFieldType)
-	if yeeStrings.IsInSlice(table.Null, filedName) {
+	if yeeStrings.IsInSlice(table.NotNull, filedName) {
 		sql += " NOT NULL"
 	}
 	MustExec(sql)
