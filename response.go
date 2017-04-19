@@ -9,6 +9,8 @@ const (
 	// DefaultCode
 	// 默认错误码0：无错误
 	DefaultCode = 0
+	// 默认有错误的错误码
+	DefaultErrorCode = -1
 	// DefaultHttpStatus
 	// 默认的http状态码200
 	DefaultHttpStatus = http.StatusOK
@@ -73,6 +75,14 @@ func (resp *Response) Customise(code int, data interface{}, msg string) error {
 // 返回失败
 func (resp *Response) Fail(err error, code int) error {
 	resp.params.Code = code
+	resp.params.Msg = err.Error()
+	return resp.Ret(resp.params)
+}
+
+// FailWithDefaultErrorCode
+// 默认错误码返回错误
+func (resp *Response) FailWithDefaultErrorCode(err error) error {
+	resp.params.Code = DefaultErrorCode
 	resp.params.Msg = err.Error()
 	return resp.Ret(resp.params)
 }

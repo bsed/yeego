@@ -208,7 +208,7 @@ func LogError(str interface{}, data LogFields) {
 // DefaultLogError
 // 默认error
 func DefaultLogError(str interface{}) {
-	LogError(str)
+	LogError(str, nil)
 }
 
 func getLogFullPath(l logrus.Level) string {
