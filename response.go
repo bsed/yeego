@@ -85,6 +85,14 @@ func (resp *Response) Success(d interface{}) error {
 	return resp.Ret(resp.params)
 }
 
+// SuccessWithMsg
+// 成功并返回msg
+func (resp *Response) SuccessWithMsg(msg string) error {
+	resp.params.Code = DefaultCode
+	resp.params.Msg = msg
+	return resp.Ret(resp.params)
+}
+
 // Ret
 // 返回结果
 func (resp *Response) Ret(par interface{}) error {
