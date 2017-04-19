@@ -210,13 +210,13 @@ func MustGetAllInTable(tableName string) []map[string]string {
 
 // RunSelectCommand
 // 执行一条selectCommand
-func RunSelectCommand(selectCommand *mysqlAst.SelectCommand) (mapValue []map[string]string, err error) {
+func RunSelectCommand(selectCommand *MysqlAst.SelectCommand) (mapValue []map[string]string, err error) {
 	prepareSql, parameterList := selectCommand.GetPrepareParameter()
 	mapValue, err = Query(prepareSql, argsStringToInterface(parameterList...)...)
 	return
 }
 
-func MustRunSelectCommand(selectCommand *mysqlAst.SelectCommand) (mapValue []map[string]string) {
+func MustRunSelectCommand(selectCommand *MysqlAst.SelectCommand) (mapValue []map[string]string) {
 	mapValue, err := RunSelectCommand(selectCommand)
 	if err != nil {
 		panic(err)

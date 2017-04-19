@@ -2,7 +2,7 @@
  * Created by angelina on 2017/4/17.
  */
 
-package mysqlAst
+package MysqlAst
 
 type SelectCommand struct {
 	selectExprList     Node
