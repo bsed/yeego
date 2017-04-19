@@ -17,8 +17,10 @@ func MustInitConfig(filePath string, fileName string) {
 	Config.SetConfigName(fileName)
 	//filePath支持相对路径和绝对路径 etc:"/a/b" "b" "./b"
 	if filePath[:1] != "/" {
-		Config.AddConfigPath(GetCurrentPath() + "/" + filePath + "/")
+		// 相对路径
+		Config.AddConfigPath(GetCurrentPath(filePath) + "/")
 	} else {
+		// 绝对路径
 		Config.AddConfigPath(filePath + "/")
 	}
 	if err := Config.ReadInConfig(); err != nil {
