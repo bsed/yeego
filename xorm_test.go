@@ -3,10 +3,7 @@
  */
 package yeego
 
-import (
-	"testing"
-)
-
+/*
 var testConfig DBConfig = DBConfig{
 	DbUser:     "root",
 	DbPassword: "root",
@@ -25,3 +22,4 @@ func TestNewDb(t *testing.T) {
 		t.Errorf("TestNewDb Error : " + err.Error())
 	}
 }
+*/

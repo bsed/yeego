@@ -50,7 +50,7 @@ var runMode string = "dev"
 // 注册log
 // @param logpath 日志位置
 // @param runmode 运行环境 dev|pro
-func MustInitLogs(path, mode string) {
+func MustInitLog(path, mode string) {
 	if mode != "" && (mode == "dev" || mode == "pro") {
 		runMode = mode
 	}
@@ -70,6 +70,12 @@ func MustInitLogs(path, mode string) {
 	setLogSConfig(debugLogS, logrus.DebugLevel)
 	errorLogS = logrus.New()
 	setLogSConfig(errorLogS, logrus.ErrorLevel)
+}
+
+// DefaultLog
+// 默认的log配置 dev模式
+func DefaultLog() {
+	MustInitLog("", "dev")
 }
 
 // MustInitESErrorLog
@@ -101,7 +107,6 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 	if runMode != "dev" {
 		logfile[level.String()], err = os.OpenFile(getLogFullPath(level), os.O_RDWR|os.O_APPEND, 0660)
 		if err != nil {
-
 			logfile[level.String()], err = os.Create(getLogFullPath(level))
 			if err != nil {
 				panic("error to create logs path : " + err.Error())
@@ -153,7 +158,8 @@ func locate(fields LogFields) LogFields {
 // 记录Debug信息
 func LogDebug(str interface{}, data LogFields) {
 	if debugLogS == nil {
-		panic("please MustInitLogs first")
+		DefaultLog()
+		//panic("please MustInitLogs first")
 	}
 	if runMode != "dev" {
 		updateLogFile(logrus.DebugLevel)
@@ -161,11 +167,18 @@ func LogDebug(str interface{}, data LogFields) {
 	debugLogS.WithFields(logrus.Fields(locate(data))).Debug(str)
 }
 
+// DefaultLogDebug
+// 默认debug
+func DefaultLogDebug(str interface{}) {
+	LogDebug(str, nil)
+}
+
 // LogInfo
 // 记录Info信息
 func LogInfo(str interface{}, data LogFields) {
 	if infoLogS == nil {
-		panic("please MustInitLogs first")
+		DefaultLog()
+		//panic("please MustInitLogs first")
 	}
 	if runMode != "dev" {
 		updateLogFile(logrus.InfoLevel)
@@ -173,16 +186,29 @@ func LogInfo(str interface{}, data LogFields) {
 	infoLogS.WithFields(logrus.Fields(data)).Info(str)
 }
 
+// DefaultLogInfo
+// 默认info
+func DefaultLogInfo(str interface{}) {
+	LogInfo(str, nil)
+}
+
 // LogError
 // 记录Error信息
 func LogError(str interface{}, data LogFields) {
 	if errorLogS == nil {
-		panic("please MustInitLogs first")
+		DefaultLog()
+		//panic("please MustInitLogs first")
 	}
 	if runMode != "dev" {
 		updateLogFile(logrus.ErrorLevel)
 	}
 	errorLogS.WithFields(logrus.Fields(data)).Error(str)
+}
+
+// DefaultLogError
+// 默认error
+func DefaultLogError(str interface{}) {
+	LogError(str)
 }
 
 func getLogFullPath(l logrus.Level) string {

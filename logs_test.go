@@ -8,7 +8,7 @@ import (
 )
 
 func TestLogDebug(t *testing.T) {
-	MustInitLogs("logs/", "")
+	MustInitLog("logs/", "")
 	LogDebug("debug", LogFields{
 		"event": "a",
 		"topic": "b",
