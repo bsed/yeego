@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/yeeyuntech/yeego/validation"
 	"net/http"
+	"github.com/yeeyuntech/yeego/yeeStrconv"
 )
 
 // Request
@@ -56,6 +57,60 @@ func NewRequest(c echo.Context) *Request {
 // 返回req的Context
 func (req *Request) Context() echo.Context {
 	return req.context
+}
+
+// ContextSet
+// 在context中存储信息
+func (req *Request) ContextSet(key string, val interface{}) {
+	req.context.Set(key, val)
+}
+
+// ContextGet
+// 从context中获取存储的信息
+func (req *Request) ContextGet(key string) interface{} {
+	return req.context.Get(key)
+}
+
+// ContextGetMap
+// 从context中获取存储的信息 map
+func (req *Request) ContextGetMap(key string) map[string]string {
+	data := req.context.Get(key)
+	if data == nil {
+		return map[string]string{}
+	}
+	info, ok := data.(map[string]string)
+	if !ok {
+		return map[string]string{}
+	}
+	return info
+}
+
+// ContextGetInt
+// 从context中获取存储的信息 int
+func (req *Request) ContextGetInt(key string) int {
+	data := req.context.Get(key)
+	if data == nil {
+		return 0
+	}
+	info, ok := data.(int)
+	if !ok {
+		return 0
+	}
+	return info
+}
+
+// ContextGetString
+// 从context中获取存储的信息 string
+func (req *Request) ContextGetString(key string) string {
+	data := req.context.Get(key)
+	if data == nil {
+		return ""
+	}
+	info, ok := data.(string)
+	if !ok {
+		return ""
+	}
+	return info
 }
 
 // SetCookie
@@ -137,6 +192,22 @@ func (req *Request) SetDefault(val string) *Request {
 	} else {
 		if len(req.params.val) == 0 {
 			req.params.val = val
+		}
+	}
+	return req
+}
+
+// SetDefaultInt
+// 设置默认参数值int
+func (req *Request) SetDefaultInt(val int) *Request {
+	if req.jsonTag == true {
+		if req.jsonParam.val == *new(Json) {
+			defJson := fmt.Sprintf(`{"index":"%d"}`, val)
+			req.jsonParam.val = *InitJson(defJson).Get("index")
+		}
+	} else {
+		if len(req.params.val) == 0 {
+			req.params.val = yeeStrconv.FormatInt(val)
 		}
 	}
 	return req
