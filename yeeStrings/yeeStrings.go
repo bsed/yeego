@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"bytes"
+	"strconv"
 )
 
 // IsInSlice
@@ -79,4 +80,19 @@ func AddURLParam(url, name, value string) string {
 		separator = "&"
 	}
 	return url + separator + name + "=" + value
+}
+
+// StringToIntArray
+// 将字符串分割为int切片 有错误直接返回空切片
+func StringToIntArray(s, sep string) []int {
+	arr := strings.Split(s, sep)
+	intArr := make([]int, len(arr))
+	for k, v := range arr {
+		i, err := strconv.Atoi(v)
+		if err != nil {
+			return []int{}
+		}
+		intArr[k] = i
+	}
+	return intArr
 }
