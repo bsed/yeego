@@ -26,3 +26,4 @@ _testmain.go
 logs
 .DS_Store
 .idea
+cache

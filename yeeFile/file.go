@@ -92,11 +92,18 @@ func FileExists(filename string) bool {
 // Mkdir
 // 创建文件夹
 func Mkdir(path string) error {
-	err := os.MkdirAll(path, os.ModePerm) //在当前目录下生成md目录
+	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// MkdirForFile
+// 为某个文件创建目录
+func MkdirForFile(path string) (err error) {
+	path = filepath.Dir(path)
+	return os.MkdirAll(path, os.FileMode(0777))
 }
 
 // FileTimeModified
