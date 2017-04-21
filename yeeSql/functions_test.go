@@ -65,20 +65,20 @@ func TestQuery(t *testing.T) {
 	yeego.Equal(infoA[0]["Id"], infoB["Id"])
 	yeego.Equal(infoA[0]["Name"], infoB["Name"])
 }
-
-initTestDbTable()
-setTestTableData()
-id, err := yeeSql.Insert("testTable", map[string]string{
-"Id":   "4",
-"Name": "angelina4",
-"Pwd":  "444",
-})
-yeego.Equal(id, 4)
-yeego.Equal(err, nil)
-info, err := yeeSql.QueryOne("SELECT * FROM testTable WHERE Id = 4")
-yeego.Equal(err, nil)
-yeego.Equal(info["Name"], "angelina4")
-yeego.Equal(info["Pwd"], "444")
+func TestInsert(t *testing.T) {
+	initTestDbTable()
+	setTestTableData()
+	id, err := yeeSql.Insert("testTable", map[string]string{
+		"Id":   "4",
+		"Name": "angelina4",
+		"Pwd":  "444",
+	})
+	yeego.Equal(id, 4)
+	yeego.Equal(err, nil)
+	info, err := yeeSql.QueryOne("SELECT * FROM testTable WHERE Id = 4")
+	yeego.Equal(err, nil)
+	yeego.Equal(info["Name"], "angelina4")
+	yeego.Equal(info["Pwd"], "444")
 }
 
 func TestUpdateByID(t *testing.T) {
@@ -96,7 +96,6 @@ func TestUpdateByID(t *testing.T) {
 	yeego.Equal(info["Pwd"], "changed")
 }
 
-func TestInsert(t *testing.T) {
 func TestDeleteByID(t *testing.T) {
 	initTestDbTable()
 	setTestTableData()
@@ -121,4 +120,17 @@ func TestGetAllInTable(t *testing.T) {
 	all, err := yeeSql.GetAllInTable("testTable")
 	yeego.Equal(err, nil)
 	yeego.Equal(len(all), 3)
+}
+
+func TestIsExist(t *testing.T) {
+	initTestDbTable()
+	setTestTableData()
+	yeego.Equal(yeeSql.IsExist("testTable", map[string]string{
+		"Id":   "1",
+		"Name": "angelina1",
+	}), true)
+	yeego.Equal(yeeSql.IsExist("testTable", map[string]string{
+		"Id":   "2",
+		"Name": "angelina1",
+	}), false)
 }

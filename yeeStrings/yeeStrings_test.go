@@ -35,3 +35,10 @@ func TestAddURLParam(t *testing.T) {
 	old = AddURLParam(old, "c", "d")
 	yeego.Equal(old, "www.baidu.com?a=b&c=d")
 }
+
+func TestStringToIntArray(t *testing.T) {
+	str1 := "1,2,3"
+	yeego.Equal(len(StringToIntArray(str1, ",")), 3)
+	str2 := "aa,aa"
+	yeego.Equal(len(StringToIntArray(str2, ",")), 0)
+}
