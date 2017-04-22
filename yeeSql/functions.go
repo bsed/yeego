@@ -15,7 +15,7 @@ import (
 // 查询语句
 func Query(query string, args ...interface{}) (output []map[string]string, err error) {
 	rows, err := GetDb().Query(GetDb().Rebind(query), args...)
-	fmt.Println("[yeeSql.Query]:Query=[", GetDb().Rebind(query), "] args=[", args, "]")
+	fmt.Println("[yeeSql.Query]:Query=[", GetDb().Rebind(query), "] args=", args)
 	if err != nil {
 		return nil, fmt.Errorf("[Query] sql: [%s] data: [%s] err:[%s]",
 			query, strings.Join(argsInterfaceToString(args), ","), err.Error())
@@ -87,7 +87,7 @@ func MustQueryOne(query string, args ...interface{}) map[string]string {
 // Exec
 // 执行语句
 func Exec(query string, args ...interface{}) (sql.Result, error) {
-	fmt.Println("[yeeSql.Exec]:Query=[", GetDb().Rebind(query), "] args=[", args, "]")
+	fmt.Println("[yeeSql.Exec]:Query=[", GetDb().Rebind(query), "] args=", args)
 	return GetDb().Exec(GetDb().Rebind(query), args...)
 }
 
