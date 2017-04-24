@@ -158,6 +158,16 @@ func (req *Request) Param(key string) *Request {
 	return req
 }
 
+// PathParam
+// 路由参数获取
+func (req *Request) PathParam(key string) *Request {
+	req.CleanParams()
+	req.params.key = key
+	req.params.val = req.context.Param(key)
+	req.jsonTag = false
+	return req
+}
+
 // SetJson
 // 设置Json相关
 func (req *Request) SetJson(json string) {
