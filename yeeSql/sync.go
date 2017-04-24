@@ -126,9 +126,14 @@ func MustCreateTable(table Table) {
 	sql := "CREATE TABLE IF NOT EXISTS `" + table.Name + "` \n("
 	sqlItemList := []string{}
 	hasPrimaryKey := false
+	if v, ok := table.FieldList[table.PrimaryKey]; ok {
+		sqlField := "`" + table.PrimaryKey + "` " + string(v)
+		sqlItemList = append(sqlItemList, sqlField)
+	}
 	for fieldName, fieldType := range table.FieldList {
 		if table.PrimaryKey == fieldName {
 			hasPrimaryKey = true
+			continue
 		}
 		sqlField := "`" + fieldName + "` " + string(fieldType)
 		if yeeStrings.IsInSlice(table.NotNull, fieldName) {
