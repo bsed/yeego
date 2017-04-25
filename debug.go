@@ -27,10 +27,11 @@ func Print(objList ...interface{}) {
 		}
 	}
 	var buf = new(bytes.Buffer)
-	fmt.Fprintf(buf, "[yeegoDebug] at %s() [%s:%d]\n", function(pc), file, line)
+	fmt.Fprintf(buf, "%c[0;40;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
 	for i := 0; i < len(objList); i++ {
 		formatData(buf, objList[i])
 	}
+	fmt.Fprintf(buf, "%c[0m", 0x1B)
 	os.Stdout.WriteString(buf.String())
 	return
 }
@@ -53,10 +54,11 @@ func Sprint(objList ...interface{}) string {
 		}
 	}
 	var buf = new(bytes.Buffer)
-	fmt.Fprintf(buf, "[yeegoDebug] at %s() [%s:%d]\n", function(pc), file, line)
+	fmt.Fprintf(buf, "%c[0;40;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
 	for i := 0; i < len(objList); i++ {
 		formatData(buf, objList[i])
 	}
+	fmt.Fprintf(buf, "%c[0m", 0x1B)
 	return buf.String()
 }
 

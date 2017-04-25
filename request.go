@@ -92,11 +92,7 @@ func (req *Request) ContextGetInt(key string) int {
 	if data == nil {
 		return 0
 	}
-	info, ok := data.(int)
-	if !ok {
-		return 0
-	}
-	return info
+	return yeeStrconv.AtoIDefault0(data.(string))
 }
 
 // ContextGetString
