@@ -10,6 +10,7 @@ import (
 	"strings"
 	"database/sql"
 	"github.com/yeeyuntech/yeego/yeeSql/MysqlAst"
+	"errors"
 )
 
 type yeeTx struct {
@@ -77,7 +78,7 @@ func (tx *yeeTx) QueryOne(query string, args ...interface{}) (output map[string]
 		return nil, err
 	}
 	if len(list) == 0 {
-		return nil, nil
+		return nil, errors.New("no row find")
 	}
 	output = list[0]
 	return output, err

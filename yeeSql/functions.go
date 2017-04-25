@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strings"
 	"github.com/yeeyuntech/yeego/yeeSql/MysqlAst"
+	"errors"
 )
 
 // Query
@@ -63,14 +64,14 @@ func MustQuery(query string, args ...interface{}) (output []map[string]string) {
 // QueryOne
 // 查询一条数据
 // 如果有多条，则返回第一条
-// 找不到返回nil
+// 找不到返回err
 func QueryOne(query string, args ...interface{}) (output map[string]string, err error) {
 	list, err := Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
 	if len(list) == 0 {
-		return nil, nil
+		return nil, errors.New("no row find")
 	}
 	output = list[0]
 	return output, err
