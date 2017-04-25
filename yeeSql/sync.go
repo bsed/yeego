@@ -102,7 +102,10 @@ func MustVerifyTableConfig(table Table) {
 // MustIsTableExist
 // 检测这个table是否存在
 func MustIsTableExist(tableName string) bool {
-	ret := MustQueryOne("SHOW TABLE STATUS WHERE Name=?", tableName)
+	ret, err := QueryOne("SHOW TABLE STATUS WHERE Name=?", tableName)
+	if err != nil {
+		return false
+	}
 	if len(ret) <= 0 {
 		return false
 	} else {

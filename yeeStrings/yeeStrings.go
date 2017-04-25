@@ -9,6 +9,7 @@ import (
 	"strings"
 	"bytes"
 	"strconv"
+	"github.com/yeeyuntech/yeego/yeeStrconv"
 )
 
 // IsInSlice
@@ -95,4 +96,11 @@ func StringToIntArray(s, sep string) []int {
 		intArr[k] = i
 	}
 	return intArr
+}
+
+// IntArrayToString
+// 将int切片组合成string
+func IntArrayToString(arr []int, sep string) string {
+	strArr := yeeStrconv.IntArrayToStringArr(arr)
+	return strings.Join(strArr, sep)
 }
