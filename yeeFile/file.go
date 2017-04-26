@@ -86,7 +86,7 @@ func AppendString(filename string, data string) error {
 // 文件或者文件夹是否存在.
 func FileExists(filename string) bool {
 	_, err := os.Stat(filename)
-	return err == nil
+	return err == nil || os.IsExist(err)
 }
 
 // Mkdir
