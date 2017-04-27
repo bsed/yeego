@@ -9,5 +9,5 @@ import (
 )
 
 func TestDateFormat(t *testing.T) {
-	println(DateFormat(time.Now(), "YYYY-MM-DD HH:MM:ss"))
+	println(DateFormat(time.Now(), "YYYY-MM-DD HH:mm:ss"))
 }
