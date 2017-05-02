@@ -41,6 +41,16 @@ func CmdBash(cmd string) *Cmd {
 	return CmdSlice([]string{"bash", "-c", cmd})
 }
 
+// SetEnv
+// 设置运行环境~
+func (c *Cmd) SetEnv(key, value string) error {
+	err := SetCmdEnv(c.GetExecCmd(), key, value)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetDir
 // 设置执行目录
 func (c *Cmd) SetDir(path string) {
