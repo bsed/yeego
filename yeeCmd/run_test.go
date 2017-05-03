@@ -10,7 +10,11 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	yeego.Equal(Run("ls"), nil)
+	yeego.Equal(Run("ls -al"), nil)
+}
+
+func TestRunSlice(t *testing.T) {
+	yeego.Equal(RunSlice([]string{"ls", "-al"}), nil)
 }
 
 func TestWhich(t *testing.T) {

@@ -3,6 +3,9 @@ package yeego
 import (
 	"net/http"
 	"github.com/labstack/echo"
+	"bytes"
+	"github.com/yeeyuntech/yeego/yeeTemplate"
+	"strings"
 )
 
 const (
@@ -30,6 +33,7 @@ type Response struct {
 	context    echo.Context
 	params     *ResParams
 	httpStatus int
+	data       map[string]interface{}
 }
 
 // NewResponse
@@ -119,4 +123,27 @@ func (resp *Response) Ret(par interface{}) error {
 func (resp *Response) Write(data []byte) error {
 	_, err := resp.context.Response().Write(data)
 	return err
+}
+
+// Data
+// 设置渲染数据
+func (resp *Response) Data(k string, v interface{}) {
+	if resp.data == nil {
+		resp.data = make(map[string]interface{})
+	}
+	resp.data[k] = v
+}
+
+// Render
+// 渲染页面
+func (resp *Response) Render(name string) error {
+	var buf bytes.Buffer
+	if !strings.Contains(name, ".") {
+		name = name + ".html"
+	}
+	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.data)
+	if err != nil {
+		return err
+	}
+	return resp.context.HTML(200, string(buf.Bytes()))
 }
