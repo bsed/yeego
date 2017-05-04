@@ -6,6 +6,9 @@ import (
 	"bytes"
 	"github.com/yeeyuntech/yeego/yeeTemplate"
 	"strings"
+	"github.com/yeeyuntech/yeego/yeeCrypto"
+	"encoding/json"
+	"time"
 )
 
 const (
@@ -34,12 +37,13 @@ type Response struct {
 	params     *ResParams
 	httpStatus int
 	data       map[string]interface{}
+	req        *Request
 }
 
 // NewResponse
 // 新建一个返回
-func NewResponse(c echo.Context) *Response {
-	return &Response{context: c, params: new(ResParams), httpStatus: DefaultHttpStatus}
+func NewResponse(c echo.Context, re *Request) *Response {
+	return &Response{context: c, params: new(ResParams), httpStatus: DefaultHttpStatus, req: re}
 }
 
 // Context
@@ -110,6 +114,7 @@ func (resp *Response) SuccessWithMsg(msg string) error {
 // Ret
 // 返回结果
 func (resp *Response) Ret(par interface{}) error {
+	resp.setSession()
 	switch ReturnType {
 	case 2:
 		return resp.context.XML(resp.httpStatus, par)
@@ -121,8 +126,16 @@ func (resp *Response) Ret(par interface{}) error {
 // Write
 // 返回row数据
 func (resp *Response) Write(data []byte) error {
+	resp.setSession()
 	_, err := resp.context.Response().Write(data)
 	return err
+}
+
+// Redirect
+// 跳转
+func (resp *Response) Redirect(url string) error {
+	resp.setSession()
+	return resp.context.Redirect(302, url)
 }
 
 // Data
@@ -137,6 +150,7 @@ func (resp *Response) Data(k string, v interface{}) {
 // Render
 // 渲染页面
 func (resp *Response) Render(name string) error {
+	resp.setSession()
 	var buf bytes.Buffer
 	if !strings.Contains(name, ".") {
 		name = name + ".html"
@@ -146,4 +160,17 @@ func (resp *Response) Render(name string) error {
 		return err
 	}
 	return resp.context.HTML(200, string(buf.Bytes()))
+}
+
+func (resp *Response) setSession() {
+	if resp.req.sessionHasSet && resp.req.sessionMap != nil {
+		sessionData, _ := json.Marshal(resp.req.sessionMap)
+		sessionValue, _ := yeeCrypto.AesEncrypt(SessionPsk, sessionData)
+		resp.context.SetCookie(&http.Cookie{
+			Name:    SessionCookieName,
+			Value:   string(sessionValue),
+			Path:    "/",
+			Expires: time.Now().Add(12 * time.Hour),
+		})
+	}
 }

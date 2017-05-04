@@ -146,7 +146,7 @@ func updateLogFile(level logrus.Level) {
 // locate
 // 找到是哪个文件的哪个地方打出的log
 func locate(fields LogFields) LogFields {
-	_, path, line, ok := runtime.Caller(2)
+	_, path, line, ok := runtime.Caller(3)
 	if ok {
 		fields["file"] = path
 		fields["line"] = line
@@ -170,7 +170,7 @@ func LogDebug(str interface{}, data LogFields) {
 // DefaultLogDebug
 // 默认debug
 func DefaultLogDebug(str interface{}) {
-	LogDebug(str, nil)
+	LogDebug(str, LogFields{})
 }
 
 // LogInfo
@@ -183,13 +183,13 @@ func LogInfo(str interface{}, data LogFields) {
 	if runMode != "dev" {
 		updateLogFile(logrus.InfoLevel)
 	}
-	infoLogS.WithFields(logrus.Fields(data)).Info(str)
+	infoLogS.WithFields(logrus.Fields(locate(data))).Info(str)
 }
 
 // DefaultLogInfo
 // 默认info
 func DefaultLogInfo(str interface{}) {
-	LogInfo(str, nil)
+	LogInfo(str, LogFields{})
 }
 
 // LogError
@@ -202,13 +202,13 @@ func LogError(str interface{}, data LogFields) {
 	if runMode != "dev" {
 		updateLogFile(logrus.ErrorLevel)
 	}
-	errorLogS.WithFields(logrus.Fields(data)).Error(str)
+	errorLogS.WithFields(logrus.Fields(locate(data))).Error(str)
 }
 
 // DefaultLogError
 // 默认error
 func DefaultLogError(str interface{}) {
-	LogError(str, nil)
+	LogError(str, LogFields{})
 }
 
 func getLogFullPath(l logrus.Level) string {

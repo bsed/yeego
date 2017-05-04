@@ -13,7 +13,12 @@ import (
 	"github.com/yeeyuntech/yeego/validation"
 	"net/http"
 	"github.com/yeeyuntech/yeego/yeeStrconv"
+	"github.com/yeeyuntech/yeego/yeeCrypto"
+	"encoding/json"
 )
+
+var SessionCookieName = "yeecmsSession"
+var SessionPsk = []byte("UuYqgL0MshCYSsMndpxRaXVLSqdkaA40cfsHCxaxE2TRoAAbQ0k2BCaecqMUXcOi")
 
 // Request
 // 封装好的Request请求
@@ -30,6 +35,10 @@ type Request struct {
 	json *Json
 	// jsonParam
 	jsonParam *JsonParam
+	// session数据
+	sessionMap map[string]string
+	// 是否开启了session
+	sessionHasSet bool
 }
 
 // Param
@@ -50,6 +59,7 @@ type JsonParam struct {
 // 从echo.Context组合请求
 func NewRequest(c echo.Context) *Request {
 	r := &Request{context: c}
+	r.sessionInit()
 	return r
 }
 
@@ -123,6 +133,71 @@ func (req *Request) GetCookie(cookieName string) *http.Cookie {
 		return nil
 	}
 	return cookie
+}
+
+// sessionInit
+// 初始化session
+func (req *Request) sessionInit() {
+	if req.sessionMap != nil {
+		return
+	}
+	cookie, err := req.context.Cookie(SessionCookieName)
+	if err != nil {
+		// 这个地方没有cookie是正常情况
+		req.sessionMap = map[string]string{}
+		return
+	}
+	output, err := yeeCrypto.AesDecrypt(SessionPsk, []byte(cookie.Value))
+	if err != nil {
+		req.sessionMap = map[string]string{}
+		return
+	}
+	err = json.Unmarshal(output, &req.sessionMap)
+	if err != nil {
+		req.sessionMap = map[string]string{}
+		return
+	}
+}
+
+// SessionSetStr
+// 向Session设置字符串
+func (req *Request) SessionSetStr(key string, value string) {
+	req.sessionInit()
+	req.sessionHasSet = true
+	req.sessionMap[key] = value
+}
+
+// SessionGetStr
+// 从Session中取出字符串
+func (req *Request) SessionGetStr(key string) string {
+	req.sessionInit()
+	return req.sessionMap[key]
+}
+
+// SessionSetJson
+// 向Session设置json
+func (req *Request) SessionSetJson(key string, value interface{}) {
+	data, _ := json.Marshal(value)
+	req.SessionSetStr(key, string(data))
+}
+
+// SessionGetJson
+// 从Session中取出json
+func (req *Request) SessionGetJson(key string, obj interface{}) error {
+	out := req.SessionGetStr(key)
+	if out == "" {
+		return errors.New("Session Empty")
+	}
+	err := json.Unmarshal([]byte(out), &obj)
+	return err
+}
+
+// SessionClear
+// 清除Session
+func (req *Request) SessionClear() {
+	req.sessionInit()
+	req.sessionHasSet = len(req.sessionMap) > 0
+	req.sessionMap = map[string]string{}
 }
 
 // GetParam

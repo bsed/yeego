@@ -33,7 +33,8 @@ func NewEcho() *echo.Echo {
 // 根据echo.Context初始化request&response
 func NewReqAndRes(c echo.Context) (req *Request, res *Response) {
 	req = NewRequest(c)
-	res = NewResponse(c)
+	res = NewResponse(c, req)
+	req.sessionInit()
 	return
 }
 
