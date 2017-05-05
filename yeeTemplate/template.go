@@ -175,6 +175,7 @@ func BuildTemplate(dir string, files ...string) error {
 					t, err = getTemplate(self.root, file, v...)
 				}
 				if err != nil {
+					panic(err)
 				} else {
 					beeTemplates[file] = t
 				}
