@@ -114,7 +114,7 @@ func (resp *Response) SuccessWithMsg(msg string) error {
 // Ret
 // 返回结果
 func (resp *Response) Ret(par interface{}) error {
-	resp.setSession()
+	resp.SetSession()
 	switch ReturnType {
 	case 2:
 		return resp.context.XML(resp.httpStatus, par)
@@ -126,15 +126,22 @@ func (resp *Response) Ret(par interface{}) error {
 // Write
 // 返回row数据
 func (resp *Response) Write(data []byte) error {
-	resp.setSession()
+	resp.SetSession()
 	_, err := resp.context.Response().Write(data)
 	return err
+}
+
+// HTML
+// 返回html数据
+func (resp *Response) HTML(html string) error {
+	resp.SetSession()
+	return resp.context.HTML(200, html)
 }
 
 // Redirect
 // 跳转
 func (resp *Response) Redirect(url string) error {
-	resp.setSession()
+	resp.SetSession()
 	return resp.context.Redirect(302, url)
 }
 
@@ -150,7 +157,7 @@ func (resp *Response) Data(k string, v interface{}) {
 // Render
 // 渲染页面
 func (resp *Response) Render(name string) error {
-	resp.setSession()
+	resp.SetSession()
 	var buf bytes.Buffer
 	if !strings.Contains(name, ".") {
 		name = name + ".html"
@@ -162,7 +169,7 @@ func (resp *Response) Render(name string) error {
 	return resp.context.HTML(200, string(buf.Bytes()))
 }
 
-func (resp *Response) setSession() {
+func (resp *Response) SetSession() {
 	if resp.req.sessionHasSet && resp.req.sessionMap != nil {
 		sessionData, _ := json.Marshal(resp.req.sessionMap)
 		sessionValue, _ := yeeCrypto.AesEncrypt(SessionPsk, sessionData)
