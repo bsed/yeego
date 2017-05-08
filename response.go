@@ -163,7 +163,8 @@ func (resp *Response) Render(name string) error {
 		name = name + ".html"
 	}
 	if Config.GetString("app.RunMode") == "dev" {
-		yeeTemplate.BuildTemplate("view")
+		err := yeeTemplate.BuildTemplate("view")
+		panic(err)
 	}
 	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.data)
 	if err != nil {
