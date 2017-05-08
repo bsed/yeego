@@ -162,6 +162,9 @@ func (resp *Response) Render(name string) error {
 	if !strings.Contains(name, ".") {
 		name = name + ".html"
 	}
+	if Config.GetString("app.RunMode") == "dev" {
+		yeeTemplate.BuildTemplate("view")
+	}
 	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.data)
 	if err != nil {
 		return err

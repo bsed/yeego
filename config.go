@@ -13,7 +13,6 @@ var Config configType
 
 func MustInitConfig(filePath string, fileName string) {
 	Config = configType{viper.New()}
-	Config.WatchConfig()
 	Config.SetConfigName(fileName)
 	//filePath支持相对路径和绝对路径 etc:"/a/b" "b" "./b"
 	if filePath[:1] != "/" {
