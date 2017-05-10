@@ -164,7 +164,9 @@ func (resp *Response) Render(name string) error {
 	}
 	if Config.GetString("app.RunMode") == "dev" {
 		err := yeeTemplate.BuildTemplate("view")
-		panic(err)
+		if err != nil {
+			panic(err)
+		}
 	}
 	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.data)
 	if err != nil {

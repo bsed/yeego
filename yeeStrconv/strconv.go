@@ -63,8 +63,8 @@ func ParseFloat64Default0(s string) float64 {
 // int数组转换为string数组
 func IntArrayToStringArr(i []int) []string {
 	strArr := make([]string, len(i))
-	for _, v := range i {
-		strArr = append(strArr, FormatInt(v))
+	for k, v := range i {
+		strArr[k] = FormatInt(v)
 	}
 	return strArr
 }
