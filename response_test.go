@@ -18,7 +18,8 @@ func mockResponse(url string) *Response {
 	req, _ := http.NewRequest(echo.GET, url, strings.NewReader(""))
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	return NewResponse(c)
+	re := NewRequest(c)
+	return NewResponse(c, re)
 }
 
 func TestResponse_Success(t *testing.T) {

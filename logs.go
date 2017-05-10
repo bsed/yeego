@@ -114,7 +114,8 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 		}
 	}
 	if runMode == "dev" {
-		logger.Out = os.Stdout
+		// 加上这个貌似没颜色了~好奇怪啊！！！
+		//logger.Out = os.Stdout
 	} else {
 		logger.Out = logfile[level.String()]
 	}
