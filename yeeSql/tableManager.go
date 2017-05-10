@@ -24,6 +24,12 @@ func MustRegisterTable(table Table) {
 	registerTableList = append(registerTableList, table)
 }
 
+// RegisterTables
+// 获取已注册的表
+func RegisterTables() []Table {
+	return registerTableList
+}
+
 // ClearRegisterTable
 // 清除系统中注册的全部数据库表
 // 不能并发调用
