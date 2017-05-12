@@ -20,6 +20,7 @@ func TestTarGz(t *testing.T) {
 	err := TarGz("./test/", "./test.tar.gz")
 	yeego.Equal(err, nil)
 	os.RemoveAll("./test")
+	os.Remove("./test.tar.gz")
 }
 
 func TestUnTarGz(t *testing.T) {
