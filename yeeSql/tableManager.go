@@ -11,7 +11,7 @@ import (
 // 注册的table表列表
 var registerTableList = []Table{}
 
-// MustRegisterTable(
+// MustRegisterTable
 // 向系统中注册表
 // 不能重复注册
 // 不能并发调用
