@@ -28,3 +28,4 @@ logs
 .idea
 cache
 yeeFile/data
+*.gz

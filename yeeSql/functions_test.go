@@ -102,7 +102,7 @@ func TestDeleteByID(t *testing.T) {
 	err := yeeSql.DeleteByID("testTable", "Id", "1")
 	yeego.Equal(err, nil)
 	info, err := yeeSql.GetOneWhere("testTable", "Id", "1")
-	yeego.Equal(err, nil)
+	yeego.NotEqual(err, nil)
 	yeego.Equal(info, nil)
 }
 
