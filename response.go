@@ -154,6 +154,12 @@ func (resp *Response) Data(k string, v interface{}) {
 	resp.data[k] = v
 }
 
+// GetData
+// 获取设置的数据
+func (resp *Response) GetData() map[string]interface{} {
+	return resp.data
+}
+
 // Render
 // 渲染页面
 func (resp *Response) Render(name string) error {
