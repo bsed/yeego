@@ -13,6 +13,19 @@ import (
 	"os"
 )
 
+// SimpleColorPrint
+// 简单的带颜色输出到stdout
+func SimpleColorPrint(objList ...interface{}) {
+	var buf = new(bytes.Buffer)
+	fmt.Fprintf(buf, "%c[0;0;33m", 0x1B)
+	for i := 0; i < len(objList); i++ {
+		formatData(buf, objList[i])
+	}
+	fmt.Fprintf(buf, "%c[0m\n", 0x1B)
+	os.Stdout.WriteString(buf.String())
+	return
+}
+
 // Print
 // 格式化打印数据.
 func Print(objList ...interface{}) {
@@ -27,7 +40,7 @@ func Print(objList ...interface{}) {
 		}
 	}
 	var buf = new(bytes.Buffer)
-	fmt.Fprintf(buf, "%c[0;40;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
+	fmt.Fprintf(buf, "%c[0;0;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
 	for i := 0; i < len(objList); i++ {
 		formatData(buf, objList[i])
 	}
@@ -54,7 +67,7 @@ func Sprint(objList ...interface{}) string {
 		}
 	}
 	var buf = new(bytes.Buffer)
-	fmt.Fprintf(buf, "%c[0;40;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
+	fmt.Fprintf(buf, "%c[0;0;32m [yeegoDebug] at %s() [%s:%d]\n", 0x1B, function(pc), file, line)
 	for i := 0; i < len(objList); i++ {
 		formatData(buf, objList[i])
 	}

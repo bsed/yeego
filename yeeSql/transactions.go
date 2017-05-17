@@ -35,7 +35,7 @@ func (tx *yeeTx) Rollback() error {
 
 func (tx *yeeTx) Query(query string, args ...interface{}) (output []map[string]string, err error) {
 	rows, err := tx.Tx.Query(tx.Tx.Rebind(query), args...)
-	fmt.Println("[yeeSql.yeeTx.Query]:Query=[", tx.Tx.Rebind(query), "] args=", args)
+	colorPrint("[yeeSql.yeeTx.Query]:Query=["+tx.Tx.Rebind(query)+"] args=", args)
 	if err != nil {
 		return nil, fmt.Errorf("[Query] sql: [%s] data: [%s] err:[%s]",
 			query, strings.Join(argsInterfaceToString(args), ","), err.Error())
@@ -85,7 +85,7 @@ func (tx *yeeTx) QueryOne(query string, args ...interface{}) (output map[string]
 }
 
 func (tx *yeeTx) Exec(query string, args ...interface{}) (sql.Result, error) {
-	fmt.Println("[yeeSql.yeeTx.Exec]:Query=[", tx.Tx.Rebind(query), "] args=", args)
+	colorPrint("[yeeSql.yeeTx.Exec]:Query=["+tx.Tx.Rebind(query)+"] args=", args)
 	return tx.Tx.Exec(tx.Tx.Rebind(query), args...)
 }
 

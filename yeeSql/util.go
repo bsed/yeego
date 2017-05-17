@@ -7,6 +7,7 @@ package yeeSql
 import (
 	"fmt"
 	"strconv"
+	"github.com/yeeyuntech/yeego"
 )
 
 func argsInterfaceToString(args ...interface{}) []string {
@@ -73,4 +74,11 @@ func (a argInt) Get(i int, args ...int) (r int) {
 		r = args[0]
 	}
 	return
+}
+
+func colorPrint(objList ...interface{}) {
+	runMode := yeego.Config.GetString("app.RunMode")
+	if runMode == "" || runMode == "dev" {
+		yeego.SimpleColorPrint(objList...)
+	}
 }

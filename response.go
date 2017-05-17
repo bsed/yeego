@@ -36,7 +36,6 @@ type Response struct {
 	context    echo.Context
 	params     *ResParams
 	httpStatus int
-	data       map[string]interface{}
 	req        *Request
 }
 
@@ -148,16 +147,24 @@ func (resp *Response) Redirect(url string) error {
 // Data
 // 设置渲染数据
 func (resp *Response) Data(k string, v interface{}) {
-	if resp.data == nil {
-		resp.data = make(map[string]interface{})
+	data := resp.context.Get("ResponseData")
+	dataMap, ok := data.(map[string]interface{})
+	if !ok {
+		dataMap = make(map[string]interface{})
 	}
-	resp.data[k] = v
+	dataMap[k] = v
+	resp.context.Set("ResponseData", dataMap)
 }
 
 // GetData
 // 获取设置的数据
 func (resp *Response) GetData() map[string]interface{} {
-	return resp.data
+	data := resp.context.Get("ResponseData")
+	dataMap, ok := data.(map[string]interface{})
+	if !ok {
+		dataMap = make(map[string]interface{})
+	}
+	return dataMap
 }
 
 // Render
@@ -174,7 +181,7 @@ func (resp *Response) Render(name string) error {
 			panic(err)
 		}
 	}
-	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.data)
+	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.context.Get("ResponseData"))
 	if err != nil {
 		return err
 	}

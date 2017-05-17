@@ -15,6 +15,7 @@ import (
 	"github.com/yeeyuntech/yeego/yeeStrconv"
 	"github.com/yeeyuntech/yeego/yeeCrypto"
 	"encoding/json"
+	"strings"
 )
 
 var SessionCookieName = "yeecmsSession"
@@ -437,6 +438,16 @@ func (req *Request) GetError() error {
 		}
 	}
 	return nil
+}
+
+// FilterScript
+// 过滤掉script标签
+func (req *Request) FilterScript() *Request {
+	req.params.val = strings.Replace(req.getParamValue(), "<script>", "", -1)
+	req.params.val = strings.Replace(req.getParamValue(), "</script>", "", -1)
+	req.params.val = strings.Replace(req.getParamValue(), "<SCRIPT>", "", -1)
+	req.params.val = strings.Replace(req.getParamValue(), "</SCRIPT>", "", -1)
+	return req
 }
 
 // Min
