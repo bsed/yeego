@@ -183,7 +183,7 @@ func (resp *Response) Render(name string) error {
 	}
 	err := yeeTemplate.ExecuteTemplate(&buf, name, resp.context.Get("ResponseData"))
 	if err != nil {
-		return err
+		return resp.context.HTML(500, err.Error())
 	}
 	return resp.context.HTML(200, string(buf.Bytes()))
 }
