@@ -84,16 +84,19 @@ func AddURLParam(url, name, value string) string {
 }
 
 // StringToIntArray
-// 将字符串分割为int切片 有错误直接返回空切片
+// 将字符串分割为int切片 有错误忽略
 func StringToIntArray(s, sep string) []int {
 	arr := strings.Split(s, sep)
-	intArr := make([]int, len(arr))
-	for k, v := range arr {
+	intArr := make([]int, 0)
+	for _, v := range arr {
+		if v == "" {
+			continue
+		}
 		i, err := strconv.Atoi(v)
 		if err != nil {
 			return []int{}
 		}
-		intArr[k] = i
+		intArr = append(intArr, i)
 	}
 	return intArr
 }
@@ -103,4 +106,24 @@ func StringToIntArray(s, sep string) []int {
 func IntArrayToString(arr []int, sep string) string {
 	strArr := yeeStrconv.IntArrayToStringArr(arr)
 	return strings.Join(strArr, sep)
+}
+
+// StringToStringArray
+// 将字符串分割为string切片
+func StringToStringArray(s, sep string) []string {
+	arr := strings.Split(s, sep)
+	strArr := make([]string, 0)
+	for _, v := range arr {
+		if v == "" {
+			continue
+		}
+		strArr = append(strArr, v)
+	}
+	return strArr
+}
+
+// StringArrayToString
+// 将string切片组合成string
+func StringArrayToString(arr []string, sep string) string {
+	return strings.Join(arr, sep)
 }
