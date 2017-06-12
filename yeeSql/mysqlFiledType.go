@@ -41,6 +41,9 @@ func (t1 MysqlFieldType) String() string {
 	if t1.IsAutoIncrement {
 		out += " auto_increment"
 	}
+	if t1.CharacterSetName != "" {
+		out += " CHARSET " + t1.CharacterSetName
+	}
 	if t1.CollationName != "" {
 		out += " COLLATE " + t1.CollationName
 	}

@@ -3,7 +3,7 @@ package jpush
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/agelinazf/jpush/common"
+	"github.com/yeeyuntech/yeego/third/jpush/common"
 )
 
 const (
