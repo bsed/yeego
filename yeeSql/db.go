@@ -23,6 +23,7 @@ func InitDb() {
 	if dbWithoutDbName == nil {
 		dbWithoutDbName = sqlx.MustConnect("mysql", dbConfig.GetDsnWithoutDbName())
 	}
+	db.SetMaxIdleConns(0)
 }
 
 func InitDbWithoutDbName() {
