@@ -17,6 +17,7 @@ import (
 	"time"
 	"runtime"
 	"github.com/yeeyuntech/yeego/yeeTime"
+	"sync"
 )
 
 var infoLogS *logrus.Logger
@@ -24,6 +25,7 @@ var debugLogS *logrus.Logger
 var errorLogS *logrus.Logger
 var day map[string]int
 var logfile map[string]*os.File
+var logFileLock *sync.Mutex
 
 type LogFields logrus.Fields
 
@@ -51,6 +53,7 @@ var runMode string = "dev"
 // @param logpath 日志位置
 // @param runmode 运行环境 dev|pro
 func MustInitLog(path, mode string) {
+	logFileLock = new(sync.Mutex)
 	if mode != "" && (mode == "dev" || mode == "pro") {
 		runMode = mode
 	}
@@ -105,6 +108,8 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 	logger.Level = level
 	logger.Formatter = new(logrus.JSONFormatter)
 	if runMode != "dev" {
+		logFileLock.Lock()
+		defer logFileLock.Unlock()
 		logfile[level.String()], err = os.OpenFile(getLogFullPath(level), os.O_RDWR|os.O_APPEND, 0660)
 		if err != nil {
 			logfile[level.String()], err = os.Create(getLogFullPath(level))
@@ -125,6 +130,8 @@ func setLogSConfig(logger *logrus.Logger, level logrus.Level) {
 // updateLogFile
 // 检测是否跨天了,把记录记录到新的文件目录中
 func updateLogFile(level logrus.Level) {
+	logFileLock.Lock()
+	defer logFileLock.Unlock()
 	var err error
 	day2 := yeeTime.Day()
 	if day2 != day[level.String()] {
