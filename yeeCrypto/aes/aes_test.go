@@ -40,8 +40,3 @@ func TestAesEncrypt(t *testing.T) {
 	fmt.Println(string(data))
 }
 
-//func TestAesDecrypt2(t *testing.T) {
-//	data := "AAAAAAAAAAAAAAAAAAAAANGpd1QsA8WyFqcSkY8+LhN8+0rURoN4DByMH8Vq/uI8"
-//	_, err := AesDecrypt([]byte("88f51f25-7eb2-4842-bcd7-df11b6dd9245ZLDPLaRf"), []byte(data))
-//	yeego.Equal(err, nil)
-//}
