@@ -6,9 +6,9 @@ import (
 	"bytes"
 	"github.com/yeeyuntech/yeego/yeeTemplate"
 	"strings"
-	"github.com/yeeyuntech/yeego/yeeCrypto"
 	"encoding/json"
 	"time"
+	"github.com/yeeyuntech/yeego/yeeCrypto/aes"
 )
 
 const (
@@ -191,7 +191,7 @@ func (resp *Response) Render(name string) error {
 func (resp *Response) SetSession() {
 	if resp.req.sessionHasSet && resp.req.sessionMap != nil {
 		sessionData, _ := json.Marshal(resp.req.sessionMap)
-		sessionValue, _ := yeeCrypto.AesEncrypt(SessionPsk, sessionData)
+		sessionValue, _ := aes.AesDecrypt(SessionPsk, sessionData)
 		resp.context.SetCookie(&http.Cookie{
 			Name:    SessionCookieName,
 			Value:   string(sessionValue),

@@ -13,9 +13,9 @@ import (
 	"github.com/yeeyuntech/yeego/validation"
 	"net/http"
 	"github.com/yeeyuntech/yeego/yeeStrconv"
-	"github.com/yeeyuntech/yeego/yeeCrypto"
 	"encoding/json"
 	"github.com/yeeyuntech/yeego/yeeXss"
+	"github.com/yeeyuntech/yeego/yeeCrypto/aes"
 )
 
 var SessionCookieName = "yeecmsSession"
@@ -148,7 +148,7 @@ func (req *Request) sessionInit() {
 		req.sessionMap = map[string]string{}
 		return
 	}
-	output, err := yeeCrypto.AesDecrypt(SessionPsk, []byte(cookie.Value))
+	output, err := aes.AesDecrypt(SessionPsk, []byte(cookie.Value))
 	if err != nil {
 		req.sessionMap = map[string]string{}
 		return

@@ -2,7 +2,7 @@
  * Created by angelina on 2017/5/4.
  */
 
-package yeeCrypto
+package aes
 
 import (
 	"crypto/sha512"
@@ -11,6 +11,7 @@ import (
 	"bytes"
 	"crypto/cipher"
 	"encoding/base64"
+	"errors"
 )
 
 // AesEncrypt aes加密
@@ -38,6 +39,11 @@ func AesEncrypt(key []byte, data []byte) ([]byte, error) {
 
 // AesDecrypt aes cbc PKCS5Padding 解密
 func AesDecrypt(key []byte, data []byte) (origData []byte, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			err = errors.New("AES解密失败")
+		}
+	}()
 	data, _ = base64.StdEncoding.DecodeString(string(data))
 	cbcIv := data[:16]
 	keyHash := sha512.Sum512(key)
