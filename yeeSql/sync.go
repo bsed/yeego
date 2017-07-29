@@ -25,10 +25,10 @@ type DbType string
 const (
 	DbTypeInt              DbType = `int(11) DEFAULT 0`
 	DbTypeIntAutoIncrement DbType = `int(11) unsigned AUTO_INCREMENT`
-	DbTypeString           DbType = `varchar(255) COLLATE utf8_bin DEFAULT ""`
-	DbTypeLongString       DbType = `longtext COLLATE utf8_bin DEFAULT ""`
+	DbTypeString           DbType = `varchar(255) COLLATE utf8mb4_bin DEFAULT ""`
+	DbTypeLongString       DbType = `longtext COLLATE utf8mb4_bin DEFAULT ""`
 	DbTypeFloat            DbType = `float default 0`
-	DbTypeDatetime         DbType = `datetime DEFAULT "0000-00-00 00:00:00"`
+	DbTypeDatetime         DbType = `datetime DEFAULT "1970-01-01 00:08:00"`
 	DbTypeBool             DbType = `tinyint(4) DEFAULT 0`
 	DbTypeLongBlob         DbType = `LONGBLOB`
 )
@@ -50,16 +50,16 @@ func (t DbType) GetMysqlFieldType() MysqlFieldType {
 		return MysqlFieldType{
 			DataType:         MysqlDataTypeVarchar,
 			Default:          "",
-			CharacterSetName: "utf8",
-			CollationName:    "utf8_bin",
+			CharacterSetName: "utf8mb4",
+			CollationName:    "utf8mb4_bin",
 			StringLength:     255,
 		}
 	case DbTypeLongString:
 		return MysqlFieldType{
 			DataType:         MysqlDataTypeLongText,
 			Default:          "",
-			CharacterSetName: "utf8",
-			CollationName:    "utf8_bin",
+			CharacterSetName: "utf8mb4",
+			CollationName:    "utf8mb4_bin",
 		}
 	case DbTypeFloat:
 		return MysqlFieldType{
@@ -69,7 +69,7 @@ func (t DbType) GetMysqlFieldType() MysqlFieldType {
 	case DbTypeDatetime:
 		return MysqlFieldType{
 			DataType: MysqlDataTypeDateTime,
-			Default:  "0000-00-00 00:00:00",
+			Default:  "1970-01-01 00:08:00",
 		}
 	case DbTypeBool:
 		return MysqlFieldType{
@@ -160,7 +160,7 @@ func MustCreateTable(table Table) {
 		sqlItemList = append(sqlItemList, uniqueSql)
 	}
 	sql += strings.Join(sqlItemList, ",\n")
-	sql += "\n) engine=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
+	sql += "\n) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin"
 	MustExec(sql)
 }
 

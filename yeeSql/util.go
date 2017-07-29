@@ -76,8 +76,18 @@ func (a argInt) Get(i int, args ...int) (r int) {
 	return
 }
 
+var runMode string = "pro"
+
+// 设置是否打印sql语句,默认不打印
+func Debug(b bool) {
+	if b {
+		runMode = "dev"
+	} else {
+		runMode = "pro"
+	}
+}
+
 func colorPrint(objList ...interface{}) {
-	runMode := yeego.Config.GetString("app.RunMode")
 	if runMode == "" || runMode == "dev" {
 		yeego.SimpleColorPrint(objList...)
 	}

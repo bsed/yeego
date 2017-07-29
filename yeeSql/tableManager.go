@@ -58,7 +58,8 @@ func MustForceSyncRegisterTable() {
 // MustCreateDb
 // 根据传入的配置创建数据库DB
 func MustCreateDb() {
-	GetDbWithoutDbName().MustExec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", GetDbConfig().DbName))
+	GetDbWithoutDbName().MustExec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s "+
+		"DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_bin;", GetDbConfig().DbName))
 }
 
 func MustDropDb() {
