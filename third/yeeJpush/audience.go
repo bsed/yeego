@@ -1,4 +1,4 @@
-package jpush
+package yeeJpush
 
 const (
 	TAG     = "tag"

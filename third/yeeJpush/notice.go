@@ -1,4 +1,4 @@
-package jpush
+package yeeJpush
 
 type NoticeSimple struct {
 	// 通知的内容在各个平台上，都可能只有这一个最基本的属性 "alert"

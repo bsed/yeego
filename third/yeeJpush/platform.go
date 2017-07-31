@@ -1,4 +1,4 @@
-package jpush
+package yeeJpush
 
 type PlatformType string
 

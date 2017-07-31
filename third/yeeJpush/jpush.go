@@ -2,7 +2,7 @@
  * Created by angelina on 2017/5/4.
  */
 
-package jpush
+package yeeJpush
 
 import (
 	"fmt"

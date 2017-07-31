@@ -2,14 +2,14 @@
  * Created by angelina on 2017/7/29.
  */
 
-package submail
+package yeeSubmail
 
 import (
 	"encoding/json"
 	"errors"
 )
 
-func SubmailSendSmsCode(phoneNum, code string) error {
+func submailSendSmsCode(phoneNum, code string) error {
 	config := Config{
 		AppId:    "submail.AppId",
 		AppKey:   "submail.AppKey",

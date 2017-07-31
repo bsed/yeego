@@ -2,7 +2,7 @@
  * Created by angelina on 2017/7/31.
  */
 
-package alidayu
+package yeeAlidayu
 
 type Result struct {
 	Code     int

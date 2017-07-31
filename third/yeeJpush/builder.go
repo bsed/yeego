@@ -1,4 +1,4 @@
-package jpush
+package yeeJpush
 
 // Base Builder
 type Builder struct {

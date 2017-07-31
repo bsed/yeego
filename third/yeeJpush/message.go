@@ -1,4 +1,4 @@
-package jpush
+package yeeJpush
 
 type Message struct {
 	Content     string                 `json:"msg_content"`

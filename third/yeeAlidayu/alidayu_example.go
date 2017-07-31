@@ -2,12 +2,11 @@
  * Created by angelina on 2017/7/31.
  */
 
-package alidayu_test
+package yeeAlidayu
 
 import (
 	"fmt"
-	"github.com/yeeyuntech/yeego/third/alidayu"
-	"github.com/yeeyuntech/yeego/third/alidayu/request"
+	"github.com/yeeyuntech/yeego/third/yeeAlidayu/request"
 )
 
 /*
@@ -35,10 +34,10 @@ import (
 }
 */
 
-func AlidayuExample() {
+func alidayuExample() {
 	appkey := "xxx"
 	appsecret := "xxx"
-	client := alidayu.DefaultClient(false, false, appkey, appsecret, "")
+	client := DefaultClient(false, false, appkey, appsecret, "")
 	smsSendRequest := request.NewAlibabaAliQinFcSmsNumSendRequest("张方", "SMS_56510312")
 	smsSendRequest.RecNum = "xxx"
 	smsSendRequest.SmsParam = `{"name":"angelina","code":"1234"}`

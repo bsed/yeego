@@ -2,14 +2,13 @@
  * Created by angelina on 2017/7/31.
  */
 
-package alidayu
+package yeeAlidayu
 
 import (
 	"strings"
 	"crypto/md5"
 	"fmt"
 	"io"
-	"github.com/yeeyuntech/yeego/third/alidayu/request"
 	"time"
 	"net/url"
 	"bytes"
@@ -17,6 +16,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"sort"
+	"github.com/yeeyuntech/yeego/third/yeeAlidayu/request"
 )
 
 const (

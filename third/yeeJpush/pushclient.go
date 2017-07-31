@@ -1,9 +1,9 @@
-package jpush
+package yeeJpush
 
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/yeeyuntech/yeego/third/jpush/common"
+	"github.com/yeeyuntech/yeego/third/yeeJpush/common"
 )
 
 const (
