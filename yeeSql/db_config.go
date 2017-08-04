@@ -43,7 +43,7 @@ func MustSetDbConfig(conf *DbConfig) {
 
 // GetDsn
 func (config *DbConfig) GetDsn() string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&timeout=10s",
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&timeout=10s",
 		config.UserName,
 		config.Password,
 		config.Host,
@@ -53,7 +53,7 @@ func (config *DbConfig) GetDsn() string {
 
 // GetDsnWithoutDbName
 func (config *DbConfig) GetDsnWithoutDbName() string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=utf8&timeout=10s",
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=utf8mb4&timeout=10s",
 		config.UserName,
 		config.Password,
 		config.Host,

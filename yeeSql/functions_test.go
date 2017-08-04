@@ -34,7 +34,7 @@ var (
 	tomlData = `
 				[[testTable]]
 				Id = "1"
-				Name = "angelina1"
+				Name = "👮👮👮"
 				Pwd = "111"
 				[[testTable]]
 				Id = "2"
@@ -70,14 +70,14 @@ func TestInsert(t *testing.T) {
 	setTestTableData()
 	id, err := yeeSql.Insert("testTable", map[string]string{
 		"Id":   "4",
-		"Name": "angelina4",
+		"Name": "👮",
 		"Pwd":  "444",
 	})
 	yeego.Equal(id, 4)
 	yeego.Equal(err, nil)
 	info, err := yeeSql.QueryOne("SELECT * FROM testTable WHERE Id = 4")
 	yeego.Equal(err, nil)
-	yeego.Equal(info["Name"], "angelina4")
+	yeego.Equal(info["Name"], "👮")
 	yeego.Equal(info["Pwd"], "444")
 }
 
