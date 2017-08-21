@@ -31,3 +31,5 @@ yeeFile/data
 *.gz
 testdata
 *.pem
+
+vendor

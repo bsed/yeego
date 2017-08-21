@@ -1,4 +1,6 @@
 package: .
+ignore:
+- github.com/yeeyuntech/yeego
 import:
 - package: code.google.com/p/graphics-go
   subpackages:
@@ -21,22 +23,6 @@ import:
   version: ~1.0.0
 - package: github.com/tealeg/xlsx
   version: ~1.0.3
-- package: github.com/yeeyuntech/yeego
-  subpackages:
-  - third/yeeAlidayu/request
-  - third/yeeJpush/common
-  - validation
-  - yeeCrypto/aes
-  - yeeFile
-  - yeeHttp
-  - yeeRand
-  - yeeReflect
-  - yeeSql/MysqlAst
-  - yeeStrconv
-  - yeeStrings
-  - yeeTemplate
-  - yeeTime
-  - yeeXss
 - package: golang.org/x/crypto
   subpackages:
   - bcrypt
