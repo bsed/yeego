@@ -8,6 +8,7 @@ import (
 	"strings"
 	"fmt"
 	"github.com/yeeyuntech/yeego/yeeStrings"
+	"sort"
 )
 
 //读取数据库的表字段,不区分大小写(某些系统的mysql不区分大小写)
@@ -133,7 +134,14 @@ func MustCreateTable(table Table) {
 		sqlField := "`" + table.PrimaryKey + "` " + string(v)
 		sqlItemList = append(sqlItemList, sqlField)
 	}
-	for fieldName, fieldType := range table.FieldList {
+	keys := make([]string, 0)
+	for k := range table.FieldList {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		fieldName := k
+		fieldType := table.FieldList[k]
 		if table.PrimaryKey == fieldName {
 			hasPrimaryKey = true
 			continue
@@ -144,6 +152,17 @@ func MustCreateTable(table Table) {
 		}
 		sqlItemList = append(sqlItemList, sqlField)
 	}
+	//for fieldName, fieldType := range table.FieldList {
+	//	if table.PrimaryKey == fieldName {
+	//		hasPrimaryKey = true
+	//		continue
+	//	}
+	//	sqlField := "`" + fieldName + "` " + string(fieldType)
+	//	if yeeStrings.IsInSlice(table.NotNull, fieldName) {
+	//		sqlField += " NOT NULL"
+	//	}
+	//	sqlItemList = append(sqlItemList, sqlField)
+	//}
 	if table.PrimaryKey != "" {
 		if !hasPrimaryKey {
 			panic(fmt.Sprintf(`table.PrimaryKey[%s], 但是这个主键不在字段列表里面`, table.PrimaryKey))
